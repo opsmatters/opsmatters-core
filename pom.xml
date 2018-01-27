@@ -261,6 +261,84 @@ built.on=${TODAY}
   <version>1.0.0</version>
 </dependency>
 
+<dependency>
+	<groupId>org.docx4j</groupId>
+	<artifactId>docx4j</artifactId>
+	<version>3.3.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.docx4j</groupId>
+          <artifactId>xhtmlrenderer</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.plutext</groupId>
+          <artifactId>jaxb-svg11</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.plutext</groupId>
+          <artifactId>jaxb-xslfo</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>fop</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>net.arnx</groupId>
+          <artifactId>wmf2svg</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi-scratchpad</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.antlr</groupId>
+          <artifactId>antlr-runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.avalon.framework</groupId>
+          <artifactId>avalon-framework-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.avalon.framework</groupId>
+          <artifactId>avalon-framework-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>jcl-over-slf4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>net.engio</groupId>
+          <artifactId>mbassador</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.thedeanda</groupId>
+          <artifactId>lorem</artifactId>
+        </exclusion>
+      </exclusions> 
+</dependency>
+
+<dependency>
+  <groupId>net.sourceforge.jexcelapi</groupId>
+  <artifactId>jxl</artifactId>
+  <version>2.6.12</version>
+</dependency>
+
+<dependency>
+	<groupId>com.opencsv</groupId>
+	<artifactId>opencsv</artifactId>
+	<version>3.10</version>
+</dependency>
+
+<dependency>
+	<groupId>joda-time</groupId>
+	<artifactId>joda-time</artifactId>
+	<version>2.9.9</version>
+</dependency>
+
 <dependency> 
   <groupId>org.apache.commons</groupId> 
   <artifactId>commons-lang3</artifactId> 
