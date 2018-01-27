@@ -328,15 +328,15 @@ built.on=${TODAY}
 </dependency>
 
 <dependency>
-	<groupId>com.opencsv</groupId>
-	<artifactId>opencsv</artifactId>
-	<version>3.10</version>
+  <groupId>com.opencsv</groupId>
+  <artifactId>opencsv</artifactId>
+  <version>3.10</version>
 </dependency>
 
 <dependency>
-	<groupId>joda-time</groupId>
-	<artifactId>joda-time</artifactId>
-	<version>2.9.9</version>
+  <groupId>joda-time</groupId>
+  <artifactId>joda-time</artifactId>
+  <version>2.9.9</version>
 </dependency>
 
 <dependency> 
