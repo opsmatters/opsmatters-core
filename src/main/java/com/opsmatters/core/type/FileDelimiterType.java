@@ -77,7 +77,7 @@ public class FileDelimiterType extends BasicType
     };
 
     /**
-     * Empty constructor.
+     * Default constructor.
      */
     public FileDelimiterType()
     {
@@ -86,6 +86,7 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Constructor that takes a string.
+     * @param s The file delimiter for the type
      */
     public FileDelimiterType(String s)
     {
@@ -95,6 +96,7 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Copy constructor.
+     * @param t The type to copy to this object
      */
     public FileDelimiterType(FileDelimiterType t)
     {
@@ -103,6 +105,7 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the array of codes for this type.
+     * @return The array of codes for this type
      */
     public String[] getCodes()
     {
@@ -111,6 +114,7 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the array of names for this type.
+     * @return The array of names for this type
      */
     public String[] getNames()
     {
@@ -119,6 +123,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the positional index of the code for this type within the array of types.
+     * @param type The type to check
+     * @return The positional index of the code for this type within the array of types
      */
     static public int getIndex(FileDelimiterType type)
     {
@@ -127,6 +133,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the name of this code within the array of codes for this type.
+     * @param code The type code to check
+     * @return The name of this code within the array of codes for this type
      */
     static public String getName(String code)
     {
@@ -144,6 +152,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the code of this name within the array of names for this type.
+     * @param o The name to check
+     * @return The code of this name within the array of names for this type
      */
     static public String getCode(Object o)
     {
@@ -165,6 +175,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the code of this name within the array of names for this type.
+     * @param o The name to check
+     * @return The code of this name within the array of names for this type
      */
     static public String getCodeIgnoreCase(Object o)
     {
@@ -186,6 +198,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Returns the positional index of this code within the array of codes for this type.
+     * @param type The type to check
+     * @return The positional index of this code within the array of codes for this type
      */
     static public int getIndex(String type)
     {
@@ -203,6 +217,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Given a delimiter name (eg. "Comma"), returns the actual delimiter (eg. ",").
+     * @param name The name of the delimiter
+     * @return The delimiter for the given name
      */
     public static String getDelimiterByName(String name)
     {
@@ -217,6 +233,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Given a delimiter code (eg. "comma"), returns the actual delimiter (eg. ",").
+     * @param code The code of the delimiter
+     * @return The delimiter for the given code
      */
     public static String getDelimiterByCode(String code)
     {
@@ -231,6 +249,8 @@ public class FileDelimiterType extends BasicType
 
     /**
      * Given a delimiter (eg. ",", returns the delimiter name (eg. "comma").
+     * @param delim The delimiter
+     * @return The name of the delimiter
      */
     public static String getDelimiterName(String delim)
     {

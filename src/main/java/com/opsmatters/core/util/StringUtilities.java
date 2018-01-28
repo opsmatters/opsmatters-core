@@ -54,6 +54,8 @@ public class StringUtilities
 
     /**
      * Serializes the given exception as a stack trace string.
+     * @param ex The exception to be serialized
+     * @return The serialized exception
      */
     static public String serialize(Throwable ex)
     {
@@ -62,6 +64,9 @@ public class StringUtilities
 
     /**
      * Serializes the given exception as a stack trace string.
+     * @param ex The exception to be serialized
+     * @param depth The maximum depth of the stack trace returned
+     * @return The serialized exception
      */
     static public String serialize(Throwable ex, int depth)
     {
@@ -70,6 +75,10 @@ public class StringUtilities
 
     /**
      * Serializes the given exception as a stack trace string.
+     * @param ex The exception to be serialized
+     * @param depth The maximum depth of the stack trace returned
+     * @param level The current level of nesting of the exception
+     * @return The serialized exception
      */
     static private String serialize(Throwable ex, int depth, int level)
     {
@@ -120,9 +129,10 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string matches the given regular expression.
-     * @param str the string against which the expression is to be matched
-     * @param expr the regular expression to match with the input string
+     * @param str The string against which the expression is to be matched
+     * @param expr The regular expression to match with the input string
      * @return <CODE>true</CODE> if the given string matches the given regular expression
+     * @throws Exception if the given expression is not valid
      */
     public static boolean getMatchResult(String str, String expr)
         throws Exception
@@ -132,7 +142,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given array as a string.
+     * Returns the given array serialized as a string.
+     * @param objs The array to be serialized
+     * @return The given array serialized as a string
      */
     public static String serialize(Object[] objs)
     {
@@ -150,7 +162,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given string after if it has been obfuscated.
+     * Returns the given string after if it has been encoded.
+     * @param str The string to be encoded
+     * @return The encoded string
      */
     public static String encode(String str)
     {
@@ -172,7 +186,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given byte array after if it has been obfuscated.
+     * Returns the given byte array after if it has been encoded.
+     * @param bytes The byte array to be encoded
+     * @return The encoded string
      */
     public static String encodeBytes(byte[] bytes)
     {
@@ -195,7 +211,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given string after if it has been de-obfuscated.
+     * Returns the given string after if it has been decoded.
+     * @param str The string to be decoded
+     * @return The decoded string
      */
     public static String decode(String str)
     {
@@ -217,7 +235,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given byte array after if it has been de-obfuscated.
+     * Returns the given byte array after if it has been decoded.
+     * @param str The string to be decoded
+     * @return The decoded bytes
      */
     public static byte[] decodeBytes(String str)
     {
@@ -241,6 +261,9 @@ public class StringUtilities
 
     /**
      * Returns the given string truncated at a word break before the given number of characters.
+     * @param str The string to be truncated
+     * @param count The maximum length of the truncated string
+     * @return The truncated string
      */
     public static String truncate(String str, int count)
     {
@@ -254,6 +277,9 @@ public class StringUtilities
 
     /**
      * Returns the number of occurences of the given character in the given string.
+     * @param c The character to look for occurrences of
+     * @param s The string to search
+     * @return The number of occurences
      */
     public static int getOccurenceCount(char c, String s) 
     {
@@ -270,6 +296,9 @@ public class StringUtilities
 
     /**
      * Returns the number of occurrences of the substring in the given string.
+     * @param expr The string to look for occurrences of
+     * @param str The string to search
+     * @return The number of occurences
      */
     public static int getOccurrenceCount(String expr, String str)
     {
@@ -283,10 +312,10 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string matches the given regular expression.
-     * @param str the string against which the expression is to be matched
-     * @param expr the regular expression to match with the input string
-     * @param whole indicates that a whole word match is required
-     * @return an object giving the results of the search (or null if no match found)
+     * @param str The string against which the expression is to be matched
+     * @param expr The regular expression to match with the input string
+     * @param whole Indicates that a whole word match is required
+     * @return An object giving the results of the search (or null if no match found)
      */
     public static Matcher getWildcardMatcher(String str, String expr, boolean whole)
     {
@@ -300,9 +329,9 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string matches the given regular expression.
-     * @param str the string against which the expression is to be matched
-     * @param expr the regular expression to match with the input string
-     * @return an object giving the results of the search (or null if no match found)
+     * @param str The string against which the expression is to be matched
+     * @param expr The regular expression to match with the input string
+     * @return An object giving the results of the search (or null if no match found)
      */
     public static Matcher getWildcardMatcher(String str, String expr)
     {
@@ -311,9 +340,9 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string matches the given regular expression.
-     * @param str the string against which the expression is to be matched
-     * @param expr the regular expression to match with the input string
-     * @param whole indicates that a whole word match is required
+     * @param str The string against which the expression is to be matched
+     * @param expr The regular expression to match with the input string
+     * @param whole Indicates that a whole word match is required
      * @return <CODE>true</CODE> if a match was found
      */
     public static boolean isWildcardMatch(String str, String expr, boolean whole)
@@ -323,8 +352,8 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string matches the given regular expression.
-     * @param str the string against which the expression is to be matched
-     * @param expr the regular expression to match with the input string
+     * @param str The string against which the expression is to be matched
+     * @param expr The regular expression to match with the input string
      * @return <CODE>true</CODE> if a match was found
      */
     public static boolean isWildcardMatch(String str, String expr)
@@ -334,8 +363,8 @@ public class StringUtilities
 
     /**
      * Checks that a string buffer ends up with a given string.
-     * @param buffer the buffer to perform the check on
-     * @param suffix the suffix
+     * @param buffer The buffer to perform the check on
+     * @param suffix The suffix
      * @return <code>true</code> if the character sequence represented by the
      * argument is a suffix of the character sequence represented by
      * the StringBuffer object; <code>false</code> otherwise. Note that the
@@ -359,6 +388,8 @@ public class StringUtilities
 
     /**
      * Converts the given string with CR and LF character correctly formatted.
+     * @param str The string to be converted
+     * @return The converted string
      */
     public static String toReadableForm(String str)
     {
@@ -375,7 +406,6 @@ public class StringUtilities
 
     /**
      * Normalises the given string, replacing certain special characters with their HTML escape sequences.
-     * <P>
      * <UL>
      * <LI> <B><CODE>&lt;</CODE></B> becomes <B><CODE>&amp;lt;</CODE></B>
      * <LI> <B><CODE>&gt;</CODE></B> becomes <B><CODE>&amp;gt;</CODE></B>
@@ -383,6 +413,8 @@ public class StringUtilities
      * <LI> <B><CODE>&quot;</CODE></B> becomes <B><CODE>&amp;quot;</CODE></B>
      * <LI> <B><CODE>'</CODE></B> becomes <B><CODE>&amp;apos;</CODE></B>
      * </UL>
+     * @param s The string to be normalised
+     * @return The normalised string
      */
     static public String normalise(String s) 
     {
@@ -429,9 +461,9 @@ public class StringUtilities
     }
 
     /**
-     * Eencode the special characters in the string to it's URL encoded representation.
-     * @param str the string to encode
-     * @return the encoded string
+     * Encode the special characters in the string to its URL encoded representation.
+     * @param str The string to encode
+     * @return The encoded string
      */
     public static String urlEncode(String str)
     {
@@ -451,6 +483,8 @@ public class StringUtilities
 
     /**
      * Returns the given string with all spaces removed.
+     * @param s The string to have spaces removed
+     * @return The given string with all spaces removed
      */
     public static String stripSpaces(String s)
     {
@@ -465,7 +499,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given string with all non-ASCII removed.
+     * Returns the given string with all non-ASCII characters removed.
+     * @param s The string to have all non-ASCII characters removed
+     * @return The given string with all non-ASCII characters removed
      */
     public static String stripNonAsciiPrintable(String s)
     {
@@ -481,6 +517,8 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the the given string contains only numeric digits [0-9].
+     * @param s The string to be checked
+     * @return <CODE>true</CODE> if the the given string contains only numeric digits [0-9]
      */
     public static boolean isNumeric(String s)
     {
@@ -495,6 +533,9 @@ public class StringUtilities
 
     /**
      * Remove any extraneous control characters from text fields.
+     * @param s The string to have control characters removed
+     * @param removeCR <CODE>true</CODE> if carriage returns should be removed
+     * @return The given string with all control characters removed
      */
     public static String removeControlCharacters(String s, boolean removeCR)
     {
@@ -510,6 +551,8 @@ public class StringUtilities
 
     /**
      * Remove any extraneous control characters from text fields.
+     * @param s The string to have control characters removed
+     * @return The given string with all control characters removed
      */
     public static String removeControlCharacters(String s)
     {
@@ -517,7 +560,8 @@ public class StringUtilities
     }
 
     /**
-     * Print the characters and control characters from the given string.
+     * Prints the character codes for the given string.
+     * @param s The string to be printed
      */
     public static void printCharacters(String s)
     {
@@ -534,6 +578,8 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string has leading and trailing double quotes.
+     * @param s The string to be checked
+     * @return <CODE>true</CODE> if the given string has leading and trailing double quotes
      */
     public static boolean hasDoubleQuotes(String s)
     {
@@ -542,6 +588,8 @@ public class StringUtilities
 
     /**
      * Returns the given string with leading and trailing quotes removed.
+     * @param s The string to have leading and trailing quotes removed
+     * @return The given string with leading and trailing quotes removed
      */
     public static String stripDoubleQuotes(String s)
     {
@@ -559,6 +607,9 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string is a valid email address.
+     * @param email The email address to be checked
+     * @param strict <CODE>true</CODE> if strict rules should be applied when checking the email address
+     * @return <CODE>true</CODE> if the given string is a valid email address
      */
     public static boolean isValidEmailAddress(String email, boolean strict)
     {
@@ -568,6 +619,8 @@ public class StringUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given string is a valid email address.
+     * @param email The email address to be checked
+     * @return <CODE>true</CODE> if the given string is a valid email address
      */
     public static boolean isValidEmailAddress(String email)
     {
@@ -575,36 +628,9 @@ public class StringUtilities
     }
 
     /**
-     * Returns the given query with illegal characters on the end removed.
-     */
-    public static String removeIllegalQueryCharacters(String str)
-    {
-        return removeIllegalQueryCharacters(str, str.toLowerCase());
-    }
-
-    /**
-     * Returns the given query with an semi-colons on the end removed.
-     */
-    public static String removeIllegalQueryCharacters(String str, String lower)
-    {
-        String ret = stripDoubleQuotes(str);
-
-        if(lower.startsWith("select")
-            || lower.startsWith("update")
-            || lower.startsWith("insert")
-            || lower.startsWith("delete")
-            || lower.startsWith("create")
-            || lower.startsWith("drop")
-            || lower.startsWith("call"))
-        {
-            while(ret.endsWith(";") || ret.endsWith("/"))
-                ret = ret.substring(0,ret.length()-1);
-        }
-        return ret;
-    }
-
-    /**
      * Strips class name prefixes from the start of the given string.
+     * @param str The string to be converted
+     * @return The string with class name prefixes removed
      */
     public static String stripClassNames(String str)
     {
@@ -623,6 +649,8 @@ public class StringUtilities
 
     /**
      * Returns the given hostname with the domain removed.
+     * @param hostname The hostname to be converted
+     * @return The hostname with the domain removed
      */
     public static String stripDomain(String hostname)
     {

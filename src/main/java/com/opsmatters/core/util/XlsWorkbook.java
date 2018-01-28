@@ -58,6 +58,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param file The file with the workbook
      */
     private XlsWorkbook(File file) 
         throws jxl.read.biff.BiffException, IOException
@@ -68,6 +69,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param stream The input stream with the workbook
      */
     private XlsWorkbook(InputStream stream) 
         throws jxl.read.biff.BiffException, IOException
@@ -77,6 +79,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param wb The workbook object to use to create the workbook
      */
     private XlsWorkbook(WritableWorkbook wb) 
         throws jxl.read.biff.BiffException, IOException
@@ -86,6 +89,9 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param file The file with the workbook
+     * @return The existing workbook object
+     * @throws IOException if the workbook cannot be opened
      */
     public static XlsWorkbook getWorkbook(File file) throws IOException
     {
@@ -101,6 +107,9 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param stream The stream with the workbook
+     * @return The existing workbook object
+     * @throws IOException if the stream cannot be read
      */
     public static XlsWorkbook getWorkbook(InputStream stream) throws IOException
     {
@@ -116,6 +125,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the internal workbook.
+     * @return The internal workbook object
      */
     @Override
     public Object getWorkbook() 
@@ -125,6 +135,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the number of worksheets in the given workbook.
+     * @return The number of worksheets in the given workbook
      */
     @Override
     public int numSheets()
@@ -139,6 +150,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the list of worksheet names from the given Excel XLS file.
+     * @return The list of worksheet names from the given workbook
      */
     @Override
     public String[] getSheetNames()
@@ -153,6 +165,8 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the worksheet at the given index in the workbook.
+     * @param i The index of the worksheet
+     * @return The worksheet at the given index in the workbook
      */
     @Override
     public XlsWorksheet getSheet(int i)
@@ -167,6 +181,8 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the worksheet with the given name in the workbook.
+     * @param name The name of the worksheet
+     * @return The worksheet with the given name in the workbook
      */
     @Override
     public XlsWorksheet getSheet(String name)
@@ -189,6 +205,10 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Creates a new workbook object.
+     * @param os The output stream for the workbook
+     * @param existing An existing workbook to add to
+     * @return The new workbook object
+     * @throws IOException if the workbook cannot be written
      */
     public static XlsWorkbook createWorkbook(OutputStream os, Workbook existing) 
         throws IOException
@@ -209,6 +229,11 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Creates a sheet in the workbook with the given name and lines of data.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @return The worksheet created
+     * @throws WriteException if the sheet cannot be created
      */
     @Override
     public XlsWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
@@ -238,6 +263,10 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Adds the given lines of data to an existing sheet in the workbook.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @throws Exception if the data cannot be appended
      */
     @Override
     public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
@@ -250,6 +279,11 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Appends the given lines to the bottom of the given sheet.
+     * @param sheet The sheet to add the lines to
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @return The array of column widths following the addition
      */
     private void appendRows(WritableSheet sheet, ReportColumn[] columns, 
         List<String[]> lines, String sheetName)
@@ -311,6 +345,11 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Returns the formatted object for the given cell.
+     * @param column The column definition to take the attributes from
+     * @param col The column number of the cell
+     * @param row The row number of the cell
+     * @param data The data in the cell
+     * @return The formatted object for the given cell
      */
     private WritableCell getCell(ReportColumn column, int col, int row, String data)
     {
@@ -376,6 +415,8 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Sets the cell attributes from the given column.
+     * @param cellFormat The dell to set the attributes on
+     * @param column The column definition to take the attributes from
      */
     public void setCellFormatAttributes(WritableCellFormat cellFormat, ReportColumn column)
     {
@@ -407,6 +448,7 @@ public class XlsWorkbook extends Workbook
 
     /**
      * Write the workbook.
+     * @throws IOException if the workbook cannot be written
      */
     @Override
     public void write() throws IOException

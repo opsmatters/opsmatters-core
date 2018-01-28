@@ -28,7 +28,7 @@ public abstract class BasicType
     private Object object;
 
     /**
-     * Empty constructor.
+     * Default constructor.
      */
     public BasicType()
     {
@@ -36,6 +36,7 @@ public abstract class BasicType
 
     /**
      * Constructor that takes a string.
+     * @param s The string value of the type
      */
     public BasicType(String s)
     {
@@ -45,6 +46,7 @@ public abstract class BasicType
 
     /**
      * Copy constructor.
+     * @param t The type to copy to this object
      */
     public BasicType(BasicType t)
     {
@@ -55,6 +57,7 @@ public abstract class BasicType
 
     /**
      * Returns the code for this type.
+     * @return The code for this type
      */
     public String getCode()
     {
@@ -63,6 +66,7 @@ public abstract class BasicType
 
     /**
      * Sets the code for this type.
+     * @param s The code for this type
      */
     public void setCode(String s)
     {
@@ -98,6 +102,7 @@ public abstract class BasicType
 
     /**
      * Returns the length of the code.
+     * @return The length of the code
      */
     public int length()
     {
@@ -106,6 +111,8 @@ public abstract class BasicType
 
     /**
      * Returns <CODE>true</CODE> if this type equals the given type.
+     * @param t The type to compare
+     * @return <CODE>true</CODE> if this type equals the given string
      */
     public boolean equals(BasicType t)
     {
@@ -121,6 +128,8 @@ public abstract class BasicType
 
     /**
      * Returns <CODE>true</CODE> if this type equals the given type (ignoring the case of the code).
+     * @param t The type to compare
+     * @return <CODE>true</CODE> if this type equals the given string
      */
     public boolean equalsIgnoreCase(BasicType t)
     {
@@ -136,6 +145,8 @@ public abstract class BasicType
 
     /**
      * Returns <CODE>true</CODE> if this type equals the given string.
+     * @param s The string to compare
+     * @return <CODE>true</CODE> if this type equals the given string
      */
     public boolean equals(String s)
     {
@@ -151,6 +162,8 @@ public abstract class BasicType
 
     /**
      * Returns <CODE>true</CODE> if this type equals the given string (ignoring the case of the code).
+     * @param s The string to compare
+     * @return <CODE>true</CODE> if this type equals the given string (ignoring the case of the code)
      */
     public boolean equalsIgnoreCase(String s)
     {
@@ -166,16 +179,19 @@ public abstract class BasicType
 
     /**
      * Returns the array of codes for this type.
+     * @return The array of codes for this type
      */
     public abstract String[] getCodes();
 
     /**
      * Returns the array of names for this type.
+     * @return The array of names for this type
      */
     public abstract String[] getNames();
 
     /**
      * Returns the positional index of this code within the array of codes for this type.
+     * @return The positional index of this code within the array of codes for this type
      */
     public int getIndex()
     {
@@ -194,6 +210,7 @@ public abstract class BasicType
 
     /**
      * Returns the display name of this type.
+     * @return The display name of this type
      */
     public String getName()
     {
@@ -205,6 +222,7 @@ public abstract class BasicType
 
     /**
      * Sets the object for the row associated with this type.
+     * @param o The object to associate with the row
      */
     public void setRowObject(Object o)
     {
@@ -213,6 +231,7 @@ public abstract class BasicType
 
     /**
      * Returns the object for the row associated with this type.
+     * @return The object for the row associated with this type
      */
     public Object getRowObject()
     {

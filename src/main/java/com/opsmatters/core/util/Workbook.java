@@ -37,6 +37,9 @@ public abstract class Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param file The file with the name of the workbook
+     * @return The existing workbook object
+     * @throws IOException if the file cannot be opened
      */
     public static Workbook getWorkbook(File file) throws IOException
     {
@@ -48,7 +51,7 @@ public abstract class Workbook
         }
         else if(lowerFilename.endsWith("."+CommonFiles.XLSX_EXT))
         {
-            XlsxWorkbook.initJAXBContexts();
+            XlsxWorkbook.initJaxbContexts();
             ret = XlsxWorkbook.getWorkbook(file);
         }
         return ret;
@@ -56,6 +59,10 @@ public abstract class Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param filename The filename of the workbook
+     * @param stream The input stream for the workbook
+     * @return The existing workbook object
+     * @throws IOException if the file cannot be read
      */
     public static Workbook getWorkbook(String filename, InputStream stream) 
         throws IOException
@@ -68,7 +75,7 @@ public abstract class Workbook
         }
         else if(lowerFilename.endsWith("."+CommonFiles.XLSX_EXT))
         {
-            XlsxWorkbook.initJAXBContexts();
+            XlsxWorkbook.initJaxbContexts();
             ret = XlsxWorkbook.getWorkbook(stream);
         }
         return ret;
@@ -76,6 +83,11 @@ public abstract class Workbook
 
     /**
      * Creates a new workbook object.
+     * @param format The format of the workbook (XLS or XLSX)
+     * @param os The output stream to write the workbook to
+     * @param existing An existing workbook to add to
+     * @return The new workbook created
+     * @throws IOException if the file cannot be written
      */
     public static Workbook createWorkbook(short format,
         OutputStream os, Workbook existing)
@@ -88,7 +100,7 @@ public abstract class Workbook
         }
         else if(format == OutputFile.XLSX_FORMAT)
         {
-            XlsxWorkbook.initJAXBContexts();
+            XlsxWorkbook.initJaxbContexts();
             ret = XlsxWorkbook.createWorkbook(os, existing);
         }
         return ret;
@@ -96,6 +108,10 @@ public abstract class Workbook
 
     /**
      * Creates a new workbook object.
+     * @param format The format of the workbook (XLS or XLSX)
+     * @param os The output stream to write the workbook to
+     * @return The new workbook created
+     * @throws IOException if the file cannot be written
      */
     public static Workbook createWorkbook(short format, OutputStream os)
         throws IOException
@@ -105,43 +121,60 @@ public abstract class Workbook
 
     /**
      * Returns the internal workbook.
+     * @return The internal workbook object
      */
     public abstract Object getWorkbook();
 
     /**
      * Returns the number of worksheets in the given workbook.
+     * @return The number of worksheets in the given workbook
      */
     public abstract int numSheets();
 
     /**
      * Returns the list of worksheet names from the given workbook.
+     * @return The list of worksheet names from the given workbook
      */
     public abstract String[] getSheetNames();
 
     /**
      * Returns the worksheet at the given index in the workbook.
+     * @param i The index of the worksheet
+     * @return The worksheet at the given index in the workbook
      */
     public abstract Worksheet getSheet(int i);
 
     /**
      * Returns the worksheet with the given name in the workbook.
+     * @param name The name of the worksheet
+     * @return The worksheet with the given name in the workbook
      */
     public abstract Worksheet getSheet(String name);
 
     /**
      * Creates a sheet in the workbook with the given name and lines of data.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @return The worksheet created
+     * @throws Exception if the sheet cannot be created
      */
     public abstract Worksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
         throws Exception;
 
     /**
      * Adds the given lines of data to an existing sheet in the workbook.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @throws Exception if the data cannot be appended
      */
     public abstract void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
         throws Exception;
 
     /**
      * Write the workbook.
+     * @throws Exception if the workbook cannot be written
      */
     public abstract void write() throws Exception;
 
@@ -151,7 +184,9 @@ public abstract class Workbook
     public abstract void close();
 
     /**
-     * Returns the current offset for the given time allowing for daylight savings.
+     * Returns the current offset for the given date allowing for daylight savings.
+     * @param dt The date to be checked
+     * @return The current offset for the given date allowing for daylight savings
      */
     protected int getOffset(long dt)
     {
@@ -164,6 +199,7 @@ public abstract class Workbook
 
     /**
      * Returns <CODE>true</CODE> if the workbook has a header row.
+     * @return <CODE>true</CODE> if the workbook has a header row
      */
     public boolean hasHeaders()
     {
@@ -172,9 +208,10 @@ public abstract class Workbook
 
     /**
      * Set to <CODE>true</CODE> if the workbook has a header row.
+     * @param headers <CODE>true</CODE> if the workbook has a header row
      */
-    public void setHeaders(boolean b)
+    public void setHeaders(boolean headers)
     {
-        headers = b;
+        this.headers = headers;
     }
 }

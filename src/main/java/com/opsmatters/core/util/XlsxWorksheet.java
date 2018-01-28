@@ -38,7 +38,9 @@ import org.xlsx4j.sml.CTXf;
 public class XlsxWorksheet extends Worksheet
 {
     /**
-     * Default constructor.
+     * Constructor that takes a worksheet and a workbook parent.
+     * @param book The workbook that will be the parent of the sheet
+     * @param s The worksheet to create
      */
     public XlsxWorksheet(XlsxWorkbook book, WorksheetPart s)
     {
@@ -62,6 +64,7 @@ public class XlsxWorksheet extends Worksheet
 
     /**
      * Returns the data in this worksheet.
+     * @return The data in this worksheet
      */
     public SheetData getSheetData()
     {
@@ -72,6 +75,7 @@ public class XlsxWorksheet extends Worksheet
 
     /**
      * Returns the number of columns in this worksheet.
+     * @return The number of columns in this worksheet
      */
     public int getColumns()
     {
@@ -82,6 +86,7 @@ public class XlsxWorksheet extends Worksheet
 
     /**
      * Returns the number of rows in this worksheet.
+     * @return The number of rows in this worksheet
      */
     public int getRows()
     {
@@ -94,7 +99,10 @@ public class XlsxWorksheet extends Worksheet
     }
 
     /**
-     * Returns the value of the cells in the given row in this worksheet.
+     * Returns the array of columns for the given row in this worksheet.
+     * @param i The index of the row in the worksheet
+     * @param df The date format to use for date columns
+     * @return The array of columns for the given row in this worksheet
      */
     public String[] getRow(int i, SimpleDateFormat df)
     {
@@ -161,6 +169,8 @@ public class XlsxWorksheet extends Worksheet
      * Returns the column number from the given cell reference (eg. A1).
      * <P>
      * eg. A=1, B=2, etc
+     * @param str The cell reference
+     * @return The column number for the cell
      */
     private int getColumn(String str)
     {
@@ -203,6 +213,8 @@ public class XlsxWorksheet extends Worksheet
      * 45 = 'mm:ss'
      * 46 = '[h]:mm:ss'
      * 47 = 'mmss.0'
+     * @param style The style reference
+     * @return <CODE>true</CODE> if the given style ref is a date or time
      */
     private boolean isDateTime(long style)
     {
@@ -235,6 +247,9 @@ public class XlsxWorksheet extends Worksheet
 
     /**
      * Returns the sheets from the given Excel XLSX file.
+     * @param file The file with the name of the XLSX file
+     * @return The sheet names from the XLSX file
+     * @throws IOException if the file cannot be opened
      */
     public static String[] getXlsxWorksheets(File file) 
         throws IOException
@@ -247,6 +262,9 @@ public class XlsxWorksheet extends Worksheet
 
     /**
      * Returns the sheets from the given Excel XLSX file.
+     * @param stream The input stream with the XLSX file
+     * @return The sheet names from the XLSX file
+     * @throws IOException if the file cannot be opened
      */
     public static String[] getXlsxWorksheets(InputStream stream) 
         throws IOException

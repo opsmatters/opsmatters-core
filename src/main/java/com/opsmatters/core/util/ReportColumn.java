@@ -167,7 +167,8 @@ public class ReportColumn
     public static final short ALIGN_FILL = 5;
 
     /**
-     * Default constructor
+     * Constructor that takes a column name
+     * @param s The name of the column
      */
     public ReportColumn(String s)
     {
@@ -176,6 +177,7 @@ public class ReportColumn
 
     /**
      * Set the column attributes from the given string in the format name=value[:name=value...]
+     * @param str The string containing the formatted attributes
      */
     public void setAttributes(String str)
     {
@@ -247,6 +249,8 @@ public class ReportColumn
 
     /**
      * Returns the cell type for the given value.
+     * @param value The cell type value
+     * @return The code for the cell type
      */
     private short getCellType(String value)
     {
@@ -264,6 +268,8 @@ public class ReportColumn
 
     /**
      * Returns the data type for the given value.
+     * @param value The data type value
+     * @return The code for the data type
      */
     private short getDataType(String value)
     {
@@ -287,6 +293,8 @@ public class ReportColumn
 
     /**
      * Returns the alignment for the given value.
+     * @param value The alignment value
+     * @return The code for the alignment
      */
     private short getAlignment(String value)
     {
@@ -341,6 +349,7 @@ public class ReportColumn
 
     /**
      * Returns the name of the column.
+     * @return The name of the column
      */
     public String getName()
     {
@@ -349,6 +358,7 @@ public class ReportColumn
 
     /**
      * Returns the displayed name of the column.
+     * @return The displayed name of the column
      */
     public String getDisplayName()
     {
@@ -357,6 +367,7 @@ public class ReportColumn
 
     /**
      * Returns the type of the column.
+     * @return The type of the column
      */
     public short getType()
     {
@@ -365,14 +376,16 @@ public class ReportColumn
 
     /**
      * Sets the type of the column.
+     * @param type The type of the column
      */
-    public void setType(short i)
+    public void setType(short type)
     {
-        type = i;
+        this.type = type;
     }
 
     /**
      * Returns the text that should be displayed for the column if the value is null.
+     * @return The text that should be displayed for the column if the value is null
      */
     public String getNullValue()
     {
@@ -381,6 +394,7 @@ public class ReportColumn
 
     /**
      * Returns the display format of the column.
+     * @return The display format of the column
      */
     public String getFormat()
     {
@@ -389,15 +403,17 @@ public class ReportColumn
 
     /**
      * Sets the display format of the column.
+     * @param format The display format of the column
      */
-    public void setFormat(String s)
+    public void setFormat(String format)
     {
-        if(s != null)
-            format = new String(s);
+        if(format != null)
+            this.format = new String(format);
     }
 
     /**
      * Returns the input type of the column for conversion.
+     * @return The input type of the column for conversion
      */
     public short getInputType()
     {
@@ -406,14 +422,16 @@ public class ReportColumn
 
     /**
      * Sets the input type of the column for conversion.
+     * @param inputType The input type of the column for conversion
      */
-    public void setInputType(short i)
+    public void setInputType(short inputType)
     {
-        inputType = i;
+        this.inputType = inputType;
     }
 
     /**
      * Returns the input format of the column for conversion.
+     * @return The input format of the column for conversion
      */
     public String getInputFormat()
     {
@@ -422,15 +440,17 @@ public class ReportColumn
 
     /**
      * Sets the input format of the column for conversion.
+     * @param inputFormat The input format of the column for conversion
      */
-    public void setInputFormat(String s)
+    public void setInputFormat(String inputFormat)
     {
-        if(s != null)
-            inputFormat = new String(s);
+        if(inputFormat != null)
+            this.inputFormat = new String(inputFormat);
     }
 
     /**
      * Returns the output type of the column for conversion.
+     * @return The output type of the column for conversion
      */
     public short getOutputType()
     {
@@ -439,14 +459,16 @@ public class ReportColumn
 
     /**
      * Sets the output type of the column for conversion.
+     * @param outputType The output type of the column for conversion
      */
-    public void setOutputType(short i)
+    public void setOutputType(short outputType)
     {
-        outputType = i;
+        this.outputType = outputType;
     }
 
     /**
      * Returns the output format of the column.
+     * @return The output format of the column for conversion
      */
     public String getOutputFormat()
     {
@@ -455,15 +477,17 @@ public class ReportColumn
 
     /**
      * Sets the output format of the column.
+     * @param outputFormat The output format of the column for conversion
      */
-    public void setOutputFormat(String s)
+    public void setOutputFormat(String outputFormat)
     {
-        if(s != null)
-            outputFormat = new String(s);
+        if(outputFormat != null)
+            this.outputFormat = new String(outputFormat);
     }
 
     /**
      * Returns the regular expression for the column.
+     * @return The regular expression for the column
      */
     public String getRegex()
     {
@@ -472,15 +496,17 @@ public class ReportColumn
 
     /**
      * Sets the regular expression for the column.
+     * @param regex The regular expression for the column
      */
-    public void setRegex(String s)
+    public void setRegex(String regex)
     {
-        if(s != null)
-            regex = new String(s);
+        if(regex != null)
+            this.regex = new String(regex);
     }
 
     /**
      * Returns the alignment of the column.
+     * @return The alignment of the column
      */
     public short getAlign()
     {
@@ -489,6 +515,7 @@ public class ReportColumn
 
     /**
      * Returns <CODE>true</CODE> if the column should wrap lines.
+     * @return <CODE>true</CODE> if the column should wrap lines
      */
     public boolean getWrap()
     {
@@ -497,6 +524,7 @@ public class ReportColumn
 
     /**
      * Returns the alternative (displayed) name for the column.
+     * @return The alternative (displayed) name for the column
      */
     public String getDisplay()
     {
@@ -505,15 +533,17 @@ public class ReportColumn
 
     /**
      * Sets the alternative (displayed) name for the column.
+     * @param display The alternative (displayed) name for the column
      */
-    public void setDisplay(String s)
+    public void setDisplay(String display)
     {
-        if(s != null)
-            display = new String(s);
+        if(display != null)
+            this.display = new String(display);
     }
 
     /**
      * Returns the format object for this column.
+     * @return The format object for this column
      */
     public WritableCellFormat getCellFormat()
     {
@@ -522,6 +552,8 @@ public class ReportColumn
 
     /**
      * Returns the format object for this column.
+     * @param create <CODE>true</CODE> if the format object should be created if it doesn't exist
+     * @return The format object for this column
      */
     public WritableCellFormat getCellFormat(boolean create)
     {
@@ -535,6 +567,7 @@ public class ReportColumn
 
     /**
      * Sets the format object for this column.
+     * @param cf The format object to use for this column
      */
     public void setCellFormat(WritableCellFormat cf)
     {
@@ -543,6 +576,9 @@ public class ReportColumn
 
     /**
      * Returns the formatted object for the given cell.
+     * @param o The value of the cell
+     * @param dateFormat The date format to use if the cell contains a date
+     * @return The formatted object for the given cell
      */
     public String getValue(Object o, String dateFormat)
     {
@@ -595,6 +631,9 @@ public class ReportColumn
 
     /**
      * Convert the given string using the defined input and output formats and types.
+     * @param str The value to be converted
+     * @param dateFormat The date format to use if the value is a date
+     * @return The converted value
      */
     private String convert(String str, String dateFormat)
     {
@@ -642,6 +681,9 @@ public class ReportColumn
 
     /**
      * Parses the given date string in the given format to a milliseconds vale.
+     * @param str The formatted date to be parsed
+     * @param format The format to use when parsing the date
+     * @return The date in milliseconds
      */
     private long parseDateTime(String str, String format)
     {
@@ -649,7 +691,10 @@ public class ReportColumn
     }
 
     /**
-     * Converts the given milliseconds value to the output date format.
+     * Converts the given milliseconds date value to the output date format.
+     * @param dt The date to be formatted
+     * @param format The format to use for the date
+     * @return The formatted date
      */
     private String convertDateTime(long dt, String format)
     {
@@ -659,7 +704,10 @@ public class ReportColumn
     }
 
     /**
-     * Converts the given integer value to the output date format.
+     * Converts the given numeric value to the output date format.
+     * @param d The value to be converted
+     * @param format The format to use for the value
+     * @return The formatted value
      */
     private String convertDecimal(double d, String format)
     {
@@ -680,6 +728,10 @@ public class ReportColumn
 
     /**
      * Converts the given string value to the output string format.
+     * @param str The value to be converted
+     * @param format The format to use for the value
+     * @param expr A regex to use for formatting the value
+     * @return The formatted value
      */
     private String convertString(String str, String format, String expr)
     {
@@ -715,6 +767,8 @@ public class ReportColumn
 
     /**
      * Returns the pattern for the given regular expression.
+     * @param expr A regex to use for formatting
+     * @return The pattern for the expression
      */
     private Pattern getPattern(String expr)
     {

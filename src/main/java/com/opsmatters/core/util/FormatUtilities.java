@@ -40,6 +40,8 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given bytes number formatted as KBytes, MBytes or GBytes as appropriate.
+     * @param bytes The bytes to be converted
+     * @return The given bytes number formatted as KBytes, MBytes or GBytes as appropriate
      */
     static public String getFormattedBytes(long bytes)
     {
@@ -48,6 +50,9 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given bytes number formatted as KBytes, MBytes or GBytes as appropriate.
+     * @param bytes The bytes to be converted
+     * @param units The units to be displayed with the converted bytes
+     * @return The given bytes number formatted as KBytes, MBytes or GBytes as appropriate
      */
     static public String getFormattedBytes(long bytes, String units)
     {
@@ -56,6 +61,10 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given bytes number formatted as KBytes, MBytes or GBytes as appropriate.
+     * @param bytes The bytes to be converted
+     * @param units The units to be displayed with the converted bytes
+     * @param format The format to use to display the bytes
+     * @return The given bytes number formatted as KBytes, MBytes or GBytes as appropriate
      */
     static public String getFormattedBytes(long bytes, String units, String format)
     {
@@ -74,7 +83,8 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the current system time formatted as "dd-MM-yyyy HH:mm:ss".
+     * Returns the current system date formatted as "dd-MM-yyyy HH:mm:ss".
+     * @return The current system date formatted as "dd-MM-yyyy HH:mm:ss"
      */
     static public String getFormattedDateTime()
     {
@@ -82,7 +92,9 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the current system time formatted using the given format.
+     * Returns the current system date formatted using the given format.
+     * @param format The format to use to display the date
+     * @return The current system date formatted using the given format
      */
     static public String getFormattedDateTime(String format)
     {
@@ -90,33 +102,47 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the given date time formatted as "dd-MM-yyyy HH:mm:ss".
+     * Returns the given date formatted as "dd-MM-yyyy HH:mm:ss".
+     * @param dt The date to be formatted
+     * @return The given date formatted as "dd-MM-yyyy HH:mm:ss"
      */
-    static public String getFormattedDateTime(long l)
+    static public String getFormattedDateTime(long dt)
     {
-        return getFormattedDateTime(l, DATETIME_FORMAT, true, 0L);
+        return getFormattedDateTime(dt, DATETIME_FORMAT, true, 0L);
     }
 
     /**
-     * Returns the given date time formatted using the given format.
+     * Returns the given date formatted using the given format.
+     * @param dt The date to be formatted
+     * @param format The format to use to display the date
+     * @param tolerance The tolerance for the date to be formatted
+     * @return The given date formatted using the given format
      */
-    static public String getFormattedDateTime(long l, String format, long tolerance)
+    static public String getFormattedDateTime(long dt, String format, long tolerance)
     {
-        return getFormattedDateTime(l, format, true, tolerance);
+        return getFormattedDateTime(dt, format, true, tolerance);
     }
 
     /**
-     * Returns the given date time formatted using the given format.
+     * Returns the given date formatted using the given format.
+     * @param dt The date to be formatted
+     * @param format The format to use to display the date
+     * @return The given date formatted using the given format
      */
-    static public String getFormattedDateTime(long l, String format)
+    static public String getFormattedDateTime(long dt, String format)
     {
-        return getFormattedDateTime(l, format, true, 0L);
+        return getFormattedDateTime(dt, format, true, 0L);
     }
 
     /**
-     * Returns the given date time formatted using the given format.
+     * Returns the given date formatted using the given format.
+     * @param dt The date to be formatted
+     * @param format The format to use to display the date
+     * @param useTZ <CODE>true</CODE> if the date should be converted using the current timezone
+     * @param tolerance The tolerance for the date to be formatted
+     * @return The given date formatted using the given format
      */
-    static public String getFormattedDateTime(long l, String format, 
+    static public String getFormattedDateTime(long dt, String format, 
         boolean useTZ, long tolerance)
     {
         String ret = "";
@@ -124,14 +150,14 @@ public class FormatUtilities extends Formats
 
         try
         {
-            if(l > tolerance)
+            if(dt > tolerance)
             {
                 df = formatPool.getFormat(format);
                 if(useTZ)
                     df.setTimeZone(DateUtilities.getCurrentTimeZone());
                 else
                     df.setTimeZone(TimeZone.getTimeZone("GMT"));
-                ret = df.format(new Date(l));
+                ret = df.format(new Date(dt));
             }
         }
         catch(Exception e)
@@ -145,37 +171,52 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the given date time formatted as "dd-MM-yyyy HH:mm:ss" in the given timezone and country.
+     * Returns the given date formatted as "dd-MM-yyyy HH:mm:ss" in the given timezone and country.
+     * @param dt The date to be formatted
+     * @param tz The timezone associated with the date
+     * @param country The country associated with the date
+     * @return The given date formatted as "dd-MM-yyyy HH:mm:ss" in the given timezone and country
      */
-    static public String getFormattedDateTime(long l, TimeZone tz, String country)
+    static public String getFormattedDateTime(long dt, TimeZone tz, String country)
     {
-        return getFormattedDateTime(l, DATETIME_FORMAT, tz, country, 0L);
+        return getFormattedDateTime(dt, DATETIME_FORMAT, tz, country, 0L);
     }
 
     /**
-     * Returns the given date time formatted using the given format, timezone and country.
+     * Returns the given date formatted using the given format, timezone and country.
+     * @param dt The date to be formatted
+     * @param format The format to use to display the date
+     * @param tz The timezone associated with the date
+     * @param country The country associated with the date
+     * @return The given date formatted using the given format, timezone and country
      */
-    static public String getFormattedDateTime(long l, String format, TimeZone tz, String country)
+    static public String getFormattedDateTime(long dt, String format, TimeZone tz, String country)
     {
-        return getFormattedDateTime(l, format, tz, country, 0L);
+        return getFormattedDateTime(dt, format, tz, country, 0L);
     }
 
     /**
-     * Returns the given date time formatted using the given format, timezone and country.
+     * Returns the given date formatted using the given format, timezone and country.
+     * @param dt The date to be formatted
+     * @param format The format to use to display the date
+     * @param tz The timezone associated with the date
+     * @param country The country associated with the date
+     * @param tolerance The tolerance for the date to be formatted
+     * @return The given date formatted using the given format, timezone and country
      */
-    static public String getFormattedDateTime(long l, String format, TimeZone tz, String country, long tolerance)
+    static public String getFormattedDateTime(long dt, String format, TimeZone tz, String country, long tolerance)
     {
         String ret = "";
         SimpleDateFormat df = null;
 
         try
         {
-            if(l > tolerance)
+            if(dt > tolerance)
             {
                 df = formatPool.getFormat(format);
                 df.setTimeZone(tz);
                 DateUtilities.setCalendarData(df.getCalendar(), DateUtilities.getLocale(country));
-                ret = df.format(new Date(l));
+                ret = df.format(new Date(dt));
             }
         }
         catch(Exception e)
@@ -189,7 +230,9 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the given date time parsed using "dd-MM-yyyy HH:mm:ss".
+     * Returns the given date parsed using "dd-MM-yyyy HH:mm:ss".
+     * @param s The formatted date to be parsed
+     * @return The given date parsed using "dd-MM-yyyy HH:mm:ss"
      */
     static public long getDateTime(String s)
     {
@@ -197,25 +240,37 @@ public class FormatUtilities extends Formats
     }
 
     /**
-     * Returns the given date time parsed using the given format.
+     * Returns the given date parsed using the given format.
+     * @param s The formatted date to be parsed
+     * @param format The format to use when parsing the date
+     * @return The given date parsed using the given format
      */
-    static public long getDateTime(String s, String fmt)
+    static public long getDateTime(String s, String format)
     {
-        return getDateTime(s, fmt, true, false);
+        return getDateTime(s, format, true, false);
+    }
+
+    /**
+     * Returns the given date parsed using the given format.
+     * @param s The formatted date to be parsed
+     * @param format The format to use when parsing the date
+     * @param useTZ <CODE>true</CODE> if the date should be parsed using the current timezone
+     * @return The given date parsed using the given format
+     */
+    static public long getDateTime(String s, String format, boolean useTZ)
+    {
+        return getDateTime(s, format, useTZ, false);
     }
 
     /**
      * Returns the given date time parsed using the given format.
+     * @param s The formatted date to be parsed
+     * @param format The format to use when parsing the date
+     * @param useTZ <CODE>true</CODE> if the date should be parsed using the current timezone
+     * @param throwException <CODE>true</CODE> if an exception should be thrown for an illegal date format
+     * @return The given date parsed using the given format
      */
-    static public long getDateTime(String s, String fmt, boolean useTZ)
-    {
-        return getDateTime(s, fmt, useTZ, false);
-    }
-
-    /**
-     * Returns the given date time parsed using the given format.
-     */
-    static public long getDateTime(String s, String fmt, boolean useTZ, boolean throwException)
+    static public long getDateTime(String s, String format, boolean useTZ, boolean throwException)
     {
         long ret = 0L;
         SimpleDateFormat df = null;
@@ -224,7 +279,7 @@ public class FormatUtilities extends Formats
         {
             if(s!= null && s.length() > 0)
             {
-                df = formatPool.getFormat(fmt);
+                df = formatPool.getFormat(format);
                 if(useTZ)
                     df.setTimeZone(DateUtilities.getCurrentTimeZone());
                 else
@@ -247,17 +302,21 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given date time parsed using the given format.
+     * @param s The formatted date to be parsed
+     * @param format The format to use when parsing the date
+     * @param tz The timezone associated with the date
+     * @return The given date parsed using the given format
      */
-    static public long getDateTime(String s, String fmt, TimeZone tz)
+    static public long getDateTime(String s, String format, TimeZone tz)
     {
         long ret = 0L;
         SimpleDateFormat df = null;
 
         try
         {
-            if(s!= null && s.length() > 0)
+            if(s != null && s.length() > 0)
             {
-                df = formatPool.getFormat(fmt);
+                df = formatPool.getFormat(format);
                 df.setTimeZone(tz);
                 Date dt = df.parse(s);
                 ret = dt.getTime();
@@ -275,19 +334,21 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given date parsed using "dd-MM-yyyy".
+     * @param dt The date to be parsed
+     * @return The given date parsed using "dd-MM-yyyy"
      */
-    static public String getFormattedDate(long l)
+    static public String getFormattedDate(long dt)
     {
         String ret = "";
         SimpleDateFormat df = null;
 
         try
         {
-            if(l > 0)
+            if(dt > 0)
             {
                 df = formatPool.getFormat(DATE_FORMAT);
                 df.setTimeZone(DateUtilities.getCurrentTimeZone());
-                ret = df.format(new Date(l));
+                ret = df.format(new Date(dt));
             }
         }
         catch(Exception e)
@@ -302,38 +363,47 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given time parsed using "HH:mm:ss".
+     * @param dt The time to be parsed
+     * @return The given time parsed using "HH:mm:ss"
      */
-    static public String getFormattedTime(long l)
+    static public String getFormattedTime(long dt)
     {
-        return getFormattedTime(l, true);
+        return getFormattedTime(dt, true);
     }
 
     /**
      * Returns the given time parsed using "HH:mm:ss".
+     * @param dt The time to be parsed
+     * @param isTime <CODE>true</CODE> if the given time has a timezone
+     * @return The given time parsed using "HH:mm:ss"
      */
-    static public String getFormattedTime(long l, boolean isTime)
+    static public String getFormattedTime(long dt, boolean isTime)
     {
-        return getFormattedTime(l, TIME_FORMAT, isTime);
+        return getFormattedTime(dt, TIME_FORMAT, isTime);
     }
 
     /**
      * Returns the given time parsed using "HH:mm:ss".
+     * @param dt The time to be parsed
+     * @param format The format to use when parsing the date
+     * @param isTime <CODE>true</CODE> if the given time has a timezone
+     * @return The given time parsed using "HH:mm:ss"
      */
-    static public String getFormattedTime(long l, String fmt, boolean isTime)
+    static public String getFormattedTime(long dt, String format, boolean isTime)
     {
         String ret = "";
         SimpleDateFormat df = null;
 
         try
         {
-            if(l > 0)
+            if(dt > 0)
             {
-                df = formatPool.getFormat(fmt);
+                df = formatPool.getFormat(format);
                 if(isTime)
                     df.setTimeZone(DateUtilities.getCurrentTimeZone());
                 else
                     df.setTimeZone(DateUtilities.defaultTZ);
-                ret = df.format(new Date(l));
+                ret = df.format(new Date(dt));
             }
         }
         catch(Exception e)
@@ -348,13 +418,15 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given time formatted as a number of days plus "HH:mm:ss".
+     * @param dt The time to be parsed
+     * @return The given time formatted as a number of days plus "HH:mm:ss"
      */
-    static public String getFormattedDays(long l)
+    static public String getFormattedDays(long dt)
     {
         StringBuffer ret = new StringBuffer();
 
-        long days = l/86400000L;
-        long millis = l-(days*86400000L);
+        long days = dt/86400000L;
+        long millis = dt-(days*86400000L);
         if(days > 0)
         {
             ret.append(Long.toString(days));
@@ -367,13 +439,15 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given time formatted as a number of days, hours and minutes.
+     * @param dt The time to be parsed
+     * @return The given time formatted as a number of days, hours and minutes
      */
-    static public String getLongFormattedDays(long l)
+    static public String getLongFormattedDays(long dt)
     {
         StringBuffer ret = new StringBuffer();
 
-        long days = l/86400000L;
-        long millis = l-(days*86400000L);
+        long days = dt/86400000L;
+        long millis = dt-(days*86400000L);
         if(days > 0)
         {
             ret.append(Long.toString(days));
@@ -424,6 +498,8 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given fractional number of seconds formatted as "0.0##".
+     * @param t The seconds to be formatted
+     * @return The given fractional number of seconds formatted as "0.0##"
      */
     static public String getFormattedSeconds(double t)
     {
@@ -433,6 +509,8 @@ public class FormatUtilities extends Formats
 
     /**
      * Returns the given fractional percentage formatted as "0.0#%".
+     * @param t The percentage to be formatted
+     * @return The given fractional percentage formatted as "0.0#%"
      */
     static public String getFormattedPercentage(double t)
     {

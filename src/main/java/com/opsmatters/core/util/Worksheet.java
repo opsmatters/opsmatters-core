@@ -27,6 +27,7 @@ public class Worksheet
 {
     /**
      * Returns the number of columns in this worksheet.
+     * @return The number of columns in this worksheet
      */
     public int getColumns()
     {
@@ -35,6 +36,7 @@ public class Worksheet
 
     /**
      * Returns the number of rows in this worksheet.
+     * @return The number of rows in this worksheet
      */
     public int getRows()
     {
@@ -42,7 +44,10 @@ public class Worksheet
     }
 
     /**
-     * Returns the value of the cells in the given row in this worksheet.
+     * Returns the array of columns for the given row in this worksheet.
+     * @param i The index of the row in the worksheet
+     * @param df The date format to use for date columns
+     * @return The array of columns for the given row in this worksheet
      */
     public String[] getRow(int i, SimpleDateFormat df)
     {

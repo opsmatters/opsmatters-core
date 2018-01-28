@@ -103,6 +103,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param file The file with the workbook
      */
     private XlsxWorkbook(File file) throws Docx4JException
     {
@@ -113,6 +114,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param stream The input stream with the workbook
      */
     private XlsxWorkbook(InputStream stream) 
         throws Docx4JException
@@ -123,6 +125,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Private constructor.
+     * @param pkg The package to use to create the workbook
+     * @param stream The output stream to write the workbook to
      */
     private XlsxWorkbook(SpreadsheetMLPackage pkg, OutputStream stream) 
         throws Docx4JException
@@ -134,6 +138,9 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param file The file with the workbook
+     * @return The existing workbook object
+     * @throws IOException if the workbook cannot be opened
      */
     public static XlsxWorkbook getWorkbook(File file) throws IOException
     {
@@ -153,6 +160,9 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns an existing workbook object.
+     * @param stream The stream with the workbook
+     * @return The existing workbook object
+     * @throws IOException if the stream cannot be read
      */
     public static XlsxWorkbook getWorkbook(InputStream stream) throws IOException
     {
@@ -167,7 +177,7 @@ public class XlsxWorkbook extends Workbook
     }
 
     /**
-     * Returns the internal workbook.
+     * Initialises the internal workbook.
      */
     private void initWorkbook() throws Docx4JException
     {
@@ -272,6 +282,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the internal workbook.
+     * @return The internal workbook object
      */
     @Override
     public Object getWorkbook() 
@@ -281,6 +292,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the number of worksheets in the given workbook.
+     * @return The number of worksheets in the given workbook
      */
     @Override
     public int numSheets()
@@ -290,6 +302,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the list of worksheet names from the given Excel XLSX file.
+     * @return The list of worksheet names from the given workbook
      */
     @Override
     public String[] getSheetNames()
@@ -309,6 +322,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the worksheet at the given index in the workbook.
+     * @param i The index of the worksheet
+     * @return The worksheet at the given index in the workbook
      */
     @Override
     public XlsxWorksheet getSheet(int i)
@@ -325,6 +340,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the worksheet with the given name in the workbook.
+     * @param name The name of the worksheet
+     * @return The worksheet with the given name in the workbook
      */
     @Override
     public XlsxWorksheet getSheet(String name)
@@ -334,6 +351,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the string at the given index in SharedStrings.xml.
+     * @param i The index of the string
+     * @return The string at the given index in SharedStrings.xml
      */
     public String getSharedString(int i)
     {
@@ -363,6 +382,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a reference to the stylesheet in styles.xml.
+     * @return A reference to the stylesheet in styles.xml
      */
     public CTStylesheet getStylesheet()
     {
@@ -371,6 +391,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the number format code for given id in styles.xml.
+     * @param id The number format id
+     * @return The number format code for given id in styles.xml
      */
     public String getFormatCode(long id)
     {
@@ -381,6 +403,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Adds the given number format to the cache.
+     * @param fmt The number format to be added
      */
     private void addFormatCode(CTNumFmt fmt) 
     {
@@ -392,6 +415,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the id for the given number format from the cache.
+     * @param formatCode The number format code to be checked
+     * @return The id for the given number format from the cache
      */
     private long getFormatId(String formatCode) 
     {
@@ -448,6 +473,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the maximum numFmtId in styles.xml.
+     * @return The maximum numFmtId in styles.xml
      */
     private long getMaxNumFmtId()
     {
@@ -478,6 +504,10 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Creates a new workbook object.
+     * @param os The output stream for the workbook
+     * @param existing An existing workbook to add to
+     * @return The new workbook object
+     * @throws IOException if the workbook cannot be written
      */
     public static XlsxWorkbook createWorkbook(OutputStream os, Workbook existing) 
         throws IOException
@@ -499,6 +529,12 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Creates a sheet in the workbook with the given name and lines of data.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @return The worksheet created
+     * @throws Docx4JException if the sheet cannot be created
+     * @throws javax.xml.bind.JAXBException if JAXB has not been initialised
      */
     @Override
     public XlsxWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
@@ -581,6 +617,10 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Adds the given lines of data to an existing sheet in the workbook.
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @throws Exception if the data cannot be appended
      */
     @Override
     public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
@@ -593,6 +633,11 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Appends the given lines to the bottom of the given sheet.
+     * @param sheetData The sheet to add the lines to
+     * @param columns The column definitions for the worksheet
+     * @param lines The list of lines to be added to the worksheet
+     * @param sheetName The name of the worksheet to be added
+     * @return The array of column widths following the addition
      */
     private int[] appendRows(SheetData sheetData, ReportColumn[] columns, 
         List<String[]> lines, String sheetName)
@@ -715,6 +760,8 @@ public class XlsxWorkbook extends Workbook
      * Returns the column reference from the column number.
      * <P>
      * eg. 0=A, 1=B, etc
+     * @param i The column number
+     * @return The column reference from the column number
      */
     private String getColumn(int i)
     {
@@ -732,6 +779,8 @@ public class XlsxWorkbook extends Workbook
      * <P>
      * If the item is not present in the list, 
      * the new item is added and its position returned.
+     * @param xf The Xf to be checked
+     * @return The position of the given Xf in the list
      */
     private int getXfPos(CTXf xf)
     {
@@ -820,6 +869,11 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTXf object.
+     * @param fontId The id of the font
+     * @param numFmtId The number format of the cell
+     * @param align The alignment of the cell
+     * @param wrap <CODE>true</CODE> if line wrapping should be enabled for the cell
+     * @return The new CTXf object
      */
     private CTXf getXf(long fontId, long numFmtId, int align, boolean wrap)
     {
@@ -873,6 +927,13 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns the formatted object for the given cell.
+     * @param cell The cell to set attributes for
+     * @param column The column definition to take the attributes from
+     * @param col The column number of the cell
+     * @param row The row number of the cell
+     * @param data The data in the cell
+     * @param sheetName The name of the worksheet containing the cell
+     * @return The formatted object for the given cell
      */
     private void setCellAttributes(Cell cell, ReportColumn column, int col, int row, 
         String data, String sheetName)
@@ -912,6 +973,9 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Sets the given cell to the "S" (shared string) type.
+     * @param cell The cell to set
+     * @param data The data in the cell
+     * @param sheetName The name of the worksheet containing the cell
      */
     private void setSharedStringCell(Cell cell, String data, String sheetName)
     {
@@ -965,6 +1029,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Sets the given cell to the "N" (number) type.
+     * @param cell The cell to set
+     * @param data The data in the cell
      */
     private void setNumberCell(Cell cell, String data)
     {
@@ -975,6 +1041,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Sets the given cell to the "S" (string) type with a date format.
+     * @param cell The cell to set
+     * @param data The data in the cell
      */
     private void setDateCell(Cell cell, String data)
     {
@@ -988,6 +1056,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Sets the given cell to the "B" (boolean) type.
+     * @param cell The cell to set
+     * @param data The data in the cell
      */
     private void setBooleanCell(Cell cell, String data)
     {
@@ -997,6 +1067,11 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTFont object with the given attributes.
+     * @param name The name of the font
+     * @param sz The size of the font
+     * @param family The family of the font
+     * @param bold <CODE>true</CODE> if the font should be bold
+     * @return The new CTFont object with the given attributes
      */
     private CTFont getFont(String name, int sz, int family, boolean bold)
     {
@@ -1016,6 +1091,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTFontName object.
+     * @param name The name of the font
+     * @return The new CTFontName object
      */
     private CTFontName getFontName(String name)
     {
@@ -1026,6 +1103,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTFontSize object.
+     * @param sz The size of the font
+     * @return The new CTFontSize object
      */
     private CTFontSize getFontSize(int sz)
     {
@@ -1036,6 +1115,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTIntProperty object.
+     * @param i The value of the property
+     * @return The new CTIntProperty object
      */
     private CTIntProperty getIntProperty(int i)
     {
@@ -1046,6 +1127,8 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Returns a new CTBooleanProperty object.
+     * @param b The value of the property
+     * @return The new CTBooleanProperty object
      */
     private CTBooleanProperty getBooleanProperty(boolean b)
     {
@@ -1056,6 +1139,7 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Write the workbook.
+     * @throws Docx4JException if the workbook cannot be written
      */
     @Override
     public void write() throws Docx4JException
@@ -1100,7 +1184,7 @@ public class XlsxWorkbook extends Workbook
     /**
      * Initialises the JAXB contexts
      */
-    public static void initJAXBContexts()
+    public static void initJaxbContexts()
     {
         if(!jaxbInitialised)
         {

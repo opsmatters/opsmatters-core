@@ -33,10 +33,10 @@ public class AppTimeZone
     private String name = "";
 
     private static AppTimeZone[] timezones = null;
-    private static String[] IDs = null;
+    private static String[] Ids = null;
     private static String[] names = null;
 
-    // Reduced list of "main" timezons
+    // Reduced list of "main" timezones
     public static String[] TIMEZONES =
     {
         "Africa/Johannesburg",
@@ -89,6 +89,7 @@ public class AppTimeZone
 
     /**
      * Constructor that takes a timezone.
+     * @param t The timezone
      */
     public AppTimeZone(TimeZone t)
     {
@@ -98,14 +99,16 @@ public class AppTimeZone
 
     /**
      * Returns the id of the timezone.
+     * @return The id of the timezone
      */
-    public String getID()
+    public String getId()
     {
         return tz.getID();
     }
 
     /**
      * Returns the offset in milliseconds of the timezone.
+     * @return The offset in milliseconds of the timezone
      */
     public int getRawOffset()
     {
@@ -114,6 +117,7 @@ public class AppTimeZone
 
     /**
      * Returns the name of the timezone.
+     * @return The name of the timezone
      */
     public String getName()
     {
@@ -130,6 +134,7 @@ public class AppTimeZone
 
     /**
      * Returns the timezone wrapped by this object.
+     * @return The timezone wrapped by this object
      */
     public TimeZone getTimeZone()
     {
@@ -138,6 +143,7 @@ public class AppTimeZone
 
     /**
      * Returns the set of cached timezones.
+     * @return The set of cached timezones
      */
     public static AppTimeZone[] getAppTimeZones()
     {
@@ -146,14 +152,16 @@ public class AppTimeZone
 
     /**
      * Returns the set of IDs for the cached timezones.
+     * @return The set of IDs for the cached timezones
      */
-    public static String[] getIDs()
+    public static String[] getIds()
     {
-        return IDs;
+        return Ids;
     }
 
     /**
      * Returns the set of names for the cached timezones.
+     * @return The set of names for the cached timezones
      */
     public static String[] getNames()
     {
@@ -162,6 +170,8 @@ public class AppTimeZone
 
     /**
      * Returns the cached timezone with the given name.
+     * @param name The name of the timezone
+     * @return The cached timezone with the given name
      */
     public static TimeZone getTimeZone(String name)
     {
@@ -179,15 +189,17 @@ public class AppTimeZone
 
     /**
      * Returns the cached timezone with the given ID.
+     * @param id The id of the timezone
+     * @return The cached timezone with the given ID
      */
-    public static TimeZone getTimeZoneByID(String id)
+    public static TimeZone getTimeZoneById(String id)
     {
         TimeZone ret = null;
         if(timezones != null)
         {
             for(int i = 0; i < timezones.length && ret == null; i++)
             {
-                if(timezones[i].getID().equals(id))
+                if(timezones[i].getId().equals(id))
                     ret = timezones[i].getTimeZone();
             }
         }
@@ -196,8 +208,10 @@ public class AppTimeZone
 
     /**
      * Returns the cached timezone with the given ID ignoring case.
+     * @param id The id of the timezone
+     * @return The cached timezone with the given ID
      */
-    public static TimeZone getTimeZoneByIDIgnoreCase(String id)
+    public static TimeZone getTimeZoneByIdIgnoreCase(String id)
     {
         TimeZone ret = null;
         if(timezones != null)
@@ -205,7 +219,7 @@ public class AppTimeZone
             id = id.toLowerCase();
             for(int i = 0; i < timezones.length && ret == null; i++)
             {
-                if(timezones[i].getID().toLowerCase().equals(id))
+                if(timezones[i].getId().toLowerCase().equals(id))
                     ret = timezones[i].getTimeZone();
             }
         }
@@ -214,6 +228,7 @@ public class AppTimeZone
 
     /**
      * Returns the display name of the timezone.
+     * @return The display name of the timezone
      */
     private String getDisplayName()
     {
@@ -252,7 +267,7 @@ public class AppTimeZone
                 int offset1 = tz1.getRawOffset();
                 int offset2 = tz2.getRawOffset();
                 if(offset1 == offset2)
-                    return tz1.getID().compareTo(tz2.getID());
+                    return tz1.getId().compareTo(tz2.getId());
                 else if(offset1 > offset2)
                     return 1;
                 else
@@ -263,13 +278,13 @@ public class AppTimeZone
         AppTimeZone[] ret = new AppTimeZone[v.size()];
         timezones = (AppTimeZone[])v.toArray(ret);
 
-        IDs = new String[v.size()+1];
+        Ids = new String[v.size()+1];
         names = new String[v.size()+1];
-        IDs[0] = "";
+        Ids[0] = "";
         names[0] = "";
         for(int i = 0; i < v.size(); i++)
         {
-            IDs[i+1] = timezones[i].getID();
+            Ids[i+1] = timezones[i].getId();
             names[i+1] = timezones[i].getName();
         }
     }

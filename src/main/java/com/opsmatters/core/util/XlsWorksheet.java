@@ -31,7 +31,8 @@ import jxl.*;
 public class XlsWorksheet extends Worksheet
 {
     /**
-     * Default constructor.
+     * Constructor that takes a sheet.
+     * @param s The worksheet to create
      */
     public XlsWorksheet(Sheet s)
     {
@@ -40,6 +41,7 @@ public class XlsWorksheet extends Worksheet
 
     /**
      * Returns the data in this worksheet.
+     * @return The data in this worksheet
      */
     public Sheet getSheet()
     {
@@ -48,6 +50,7 @@ public class XlsWorksheet extends Worksheet
 
     /**
      * Returns the number of columns in this worksheet.
+     * @return The number of columns in this worksheet
      */
     public int getColumns()
     {
@@ -59,6 +62,7 @@ public class XlsWorksheet extends Worksheet
 
     /**
      * Returns the number of rows in this worksheet.
+     * @return The number of rows in this worksheet
      */
     public int getRows()
     {
@@ -69,7 +73,10 @@ public class XlsWorksheet extends Worksheet
     }
 
     /**
-     * Returns the value of the cells in the given row in this worksheet.
+     * Returns the array of columns for the given row in this worksheet.
+     * @param i The index of the row in the worksheet
+     * @param df The date format to use for date columns
+     * @return The array of columns for the given row in this worksheet
      */
     public String[] getRow(int i, SimpleDateFormat df)
     {
@@ -112,6 +119,10 @@ public class XlsWorksheet extends Worksheet
 
     /**
      * Returns the sheets from the given Excel XLS file.
+     * @param file The file with the name of the XLS file
+     * @return The sheet names from the XLS file
+     * @throws IOException if the file cannot be opened
+     * @throws jxl.read.biff.BiffException if there is a format error with the file
      */
     public static String[] getXlsWorksheets(File file) 
         throws IOException, jxl.read.biff.BiffException
@@ -124,6 +135,10 @@ public class XlsWorksheet extends Worksheet
 
     /**
      * Returns the sheets from the given Excel XLS file.
+     * @param stream The input stream with the XLS file
+     * @return The sheet names from the XLS file
+     * @throws IOException if the file cannot be opened
+     * @throws jxl.read.biff.BiffException if there is a format error with the file
      */
     public static String[] getXlsWorksheets(InputStream stream) 
         throws IOException, jxl.read.biff.BiffException

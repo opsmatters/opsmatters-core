@@ -90,6 +90,12 @@ public class DateUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given date is inside the start and end hours.
+     * @param dt The date to be checked
+     * @param tz The timezone associated with the date
+     * @param from The start hour to check that the date is after
+     * @param to The end hour to check that the date is before
+     * @param tolerance The tolerance that by the which the date can be outside the range but still be considered inside
+     * @return <CODE>true</CODE> if the given date is inside the start and end hours
      */
     public static boolean isBetweenHours(long dt, TimeZone tz, int from, int to, int tolerance) 
     {
@@ -124,6 +130,9 @@ public class DateUtilities
 
     /**
      * Returns <CODE>true</CODE> if the current date is inside the start and end hours.
+     * @param from The start hour to check that the date is after
+     * @param to The end hour to check that the date is before
+     * @return <CODE>true</CODE> if the current date is inside the start and end hours
      */
     public static boolean isBetweenHours(int from, int to) 
     {
@@ -132,6 +141,10 @@ public class DateUtilities
 
     /**
      * Returns <CODE>true</CODE> if the current date is inside the start and end hours.
+     * @param from The start hour to check that the date is after
+     * @param to The end hour to check that the date is before
+     * @param tz The timezone associated with the date
+     * @return <CODE>true</CODE> if the current date is inside the start and end hours
      */
     public static boolean isBetweenHours(int from, int to, TimeZone tz) 
     {
@@ -140,6 +153,11 @@ public class DateUtilities
 
     /**
      * Returns <CODE>true</CODE> if the given date is inside the start and end hours.
+     * @param dt The date to be checked
+     * @param from The start hour to check that the date is after
+     * @param to The end hour to check that the date is before
+     * @param tz The timezone associated with the date
+     * @return <CODE>true</CODE> if the given date is inside the start and end hours
      */
     public static boolean isBetweenHours(long dt, TimeZone tz, int from, int to) 
     {
@@ -148,6 +166,11 @@ public class DateUtilities
 
     /**
      * Returns the date for the given hour.
+     * @param dt The date to be checked
+     * @param tz The timezone associated with the date
+     * @param hour The hour to be checked
+     * @param dayoffset The day of the month to offset
+     * @return The date for the given hour
      */
     private static long getDateForHour(long dt, TimeZone tz, int hour, int dayoffset)
     {
@@ -164,7 +187,10 @@ public class DateUtilities
     }
 
     /**
-     * Returns a new calendar object using the current timezone and locale.
+     * Returns a new calendar object using the given timezone and locale.
+     * @param tz The timezone associated with the new calendar
+     * @param locale The locale associated with the new calendar
+     * @return A new calendar object for the given timezone and locale
      */
     public static Calendar getCalendar(TimeZone tz, Locale locale)
     {
@@ -176,7 +202,9 @@ public class DateUtilities
     }
 
     /**
-     * Returns a new calendar object using the current timezone.
+     * Returns a new calendar object using the given timezone and default locale.
+     * @param tz The timezone associated with the new calendar
+     * @return A new calendar object for the given timezone
      */
     public static Calendar getCalendar(TimeZone tz)
     {
@@ -184,7 +212,8 @@ public class DateUtilities
     }
 
     /**
-     * Returns a new calendar object in the current timezone.
+     * Returns a new calendar object in the current timezone and default locale.
+     * @return A new calendar object for the current timezone
      */
     public static Calendar getCalendar()
     {
@@ -193,6 +222,7 @@ public class DateUtilities
 
     /**
      * Returns the current time zone.
+     * @return The current time zone
      */
     public static TimeZone getCurrentTimeZone()
     {
@@ -203,6 +233,7 @@ public class DateUtilities
 
     /**
      * Sets the current time zone.
+     * @param tz The current time zone to set
      */
     public static void setCurrentTimeZone(TimeZone tz)
     {
@@ -213,6 +244,7 @@ public class DateUtilities
      * Returns the current configured time zone.
      * <P>
      * Converts GMT to British Summer Time (BST) so that it uses Daylight Savings.
+     * @return The current configured time zone
      */
     public static TimeZone getUserTimeZone()
     {
@@ -220,7 +252,7 @@ public class DateUtilities
 
         // First try the configured timezone
         String tz = DEFAULT_TIMEZONE;
-        ret = AppTimeZone.getTimeZoneByID(tz);
+        ret = AppTimeZone.getTimeZoneById(tz);
         if(ret == null)
         {
             // Next try the locale timezone
@@ -240,6 +272,7 @@ public class DateUtilities
 
     /**
      * Returns the current locale.
+     * @return The current configured locale
      */
     public static Locale getCurrentLocale()
     {
@@ -250,6 +283,7 @@ public class DateUtilities
 
     /**
      * Sets the current locale.
+     * @param locale The current configured locale to set
      */
     public static void setCurrentLocale(Locale locale)
     {
@@ -258,6 +292,7 @@ public class DateUtilities
 
     /**
      * Returns the locale for the current country.
+     * @return The locale for the current country
      */
     public static Locale getUserLocale()
     {
@@ -267,6 +302,7 @@ public class DateUtilities
 
     /**
      * Returns the country from the default locale.
+     * @return The current country from the default locale
      */
     public static String getCurrentCountry()
     {
@@ -275,6 +311,8 @@ public class DateUtilities
 
     /**
      * Returns the locale for the given country.
+     * @param country The country for the locale
+     * @return The locale for the given country
      */
     public static Locale getLocale(String country)
     {
@@ -289,6 +327,8 @@ public class DateUtilities
 
     /**
      * Set the attributes of the given calendar from the given locale.
+     * @param calendar The calendar to set the date settings on
+     * @param locale The locale to use for the date settings
      */
     public static void setCalendarData(Calendar calendar, Locale locale)
     {
@@ -307,6 +347,9 @@ public class DateUtilities
 
     /**
      * Returns the given date adding the given number of days.
+     * @param dt The date to add the days to
+     * @param days The number of days to add. To subtract days, use a negative value.
+     * @return The date with the given days added
      */
     public static Date addDays(long dt, int days)
     {
@@ -319,6 +362,8 @@ public class DateUtilities
 
     /**
      * Returns the system date adding the given number of days.
+     * @param days The number of days to add. To subtract days, use a negative value.
+     * @return The date with the given days added
      */
     public static Date addDays(int days)
     {
@@ -326,29 +371,35 @@ public class DateUtilities
     }
 
     /**
-     * Returns the given date adjusted using the given timezone.
+     * Returns the given date converted to UTC using the given timezone.
+     * @param millis The date to convert
+     * @param tz The timezone associated with the date
+     * @return The given date converted using the given timezone
      */
-    public static long convertToUTC(long l, String timezone)
+    public static long convertToUtc(long millis, String tz)
     {
-        long ret = l;
-        if(timezone != null && timezone.length() > 0)
+        long ret = millis;
+        if(tz != null && tz.length() > 0)
         {
-            DateTime dt = new DateTime(l, DateTimeZone.forID(timezone));
+            DateTime dt = new DateTime(millis, DateTimeZone.forID(tz));
             ret = dt.withZoneRetainFields(DateTimeZone.forID("UTC")).getMillis();
         }
         return ret;
     }
 
     /**
-     * Returns the given date adjusted using the given timezone.
+     * Returns the given date converted from UTC using the given timezone.
+     * @param millis The date to convert
+     * @param tz The timezone associated with the date
+     * @return The given date converted using the given timezone
      */
-    public static long convertFromUTC(long l, String timezone)
+    public static long convertFromUtc(long millis, String tz)
     {
-        long ret = l;
-        if(timezone != null && timezone.length() > 0)
+        long ret = millis;
+        if(tz != null && tz.length() > 0)
         {
-            DateTime dt = new DateTime(l, DateTimeZone.forID("UTC"));
-            ret = dt.withZoneRetainFields(DateTimeZone.forID(timezone)).getMillis();
+            DateTime dt = new DateTime(millis, DateTimeZone.forID("UTC"));
+            ret = dt.withZoneRetainFields(DateTimeZone.forID(tz)).getMillis();
         }
         return ret;
     }

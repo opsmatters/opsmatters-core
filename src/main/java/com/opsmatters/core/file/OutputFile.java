@@ -60,7 +60,8 @@ public class OutputFile
     public static final short XLSX_FORMAT = 2;
 
     /**
-     * Default constructor.
+     * Constructor that takes a filename.
+     * @param filename The filename of the output file
      */
     public OutputFile(String filename)
     {
@@ -68,7 +69,8 @@ public class OutputFile
     }
 
     /**
-     * Default constructor.
+     * Constructor that takes a format.
+     * @param format The format of the output file
      */
     public OutputFile(short format)
     {
@@ -95,6 +97,7 @@ public class OutputFile
 
     /**
      * Returns the delimiter character for the file (CSV only).
+     * @return The delimiter character for the file (CSV only)
      */
     private char getDelimiterChar()
     {
@@ -109,8 +112,8 @@ public class OutputFile
     }
 
     /**
-     * Returns <CODE>true</CODE> if the workbook has quotes around each field.
-     * @return <CODE>true</CODE> if the workbook has quotes around each field
+     * Returns <CODE>true</CODE> if the output file has quotes around each field.
+     * @return <CODE>true</CODE> if the output file has quotes around each field
      */
     public boolean hasQuotes()
     {
@@ -118,8 +121,8 @@ public class OutputFile
     }
 
     /**
-     * Set to <CODE>true</CODE> if the workbook has quotes around each field.
-     * @param quotes <CODE>true</CODE> if the workbook has quotes around each field
+     * Set to <CODE>true</CODE> if the output file has quotes around each field.
+     * @param quotes <CODE>true</CODE> if the output file has quotes around each field
      */
     public void setQuotes(boolean quotes)
     {
@@ -127,8 +130,8 @@ public class OutputFile
     }
 
     /**
-     * Returns <CODE>true</CODE> if the workbook has a header row.
-     * @return <CODE>true</CODE> if the workbook has a header row
+     * Returns <CODE>true</CODE> if the output file has a header row.
+     * @return <CODE>true</CODE> if the output file has a header row
      */
     public boolean hasHeaders()
     {
@@ -136,8 +139,8 @@ public class OutputFile
     }
 
     /**
-     * Set to <CODE>true</CODE> if the workbook has a header row.
-     * @param headers <CODE>true</CODE> if the workbook has a header row
+     * Set to <CODE>true</CODE> if the output file has a header row.
+     * @param headers <CODE>true</CODE> if the output file has a header row
      */
     public void setHeaders(boolean headers)
     {
@@ -146,6 +149,8 @@ public class OutputFile
 
     /**
      * Returns the file type based on the file name.
+     * @param filename The filename to check
+     * @return The file type based on the file name
      */
     public short getFileType(String filename)
     {
@@ -162,6 +167,11 @@ public class OutputFile
 
     /**
      * Returns the formatted output file contents.
+     * @param lines The lines to add to the output file
+     * @param sheetName The name of the worksheet
+     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+     * @return The formatted output file contents
+     * @throws Exception if the file cannot be opened
      */
     public byte[] getContents(List<String[]> lines, String sheetName, boolean append) throws Exception
     {
@@ -170,6 +180,12 @@ public class OutputFile
 
     /**
      * Returns the formatted output file contents.
+     * @param columns The column definitions for the output file
+     * @param lines The lines to add to the output file
+     * @param sheetName The name of the worksheet
+     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+     * @return The formatted output file contents
+     * @throws Exception if the file cannot be opened
      */
     public byte[] getContents(ReportColumn[] columns, 
         List<String[]> lines, String sheetName, boolean append) throws Exception
@@ -191,6 +207,9 @@ public class OutputFile
 
     /**
      * Returns the CSV output file data.
+     * @param lines The lines to add to the output file
+     * @param sheetName The name of the worksheet
+     * @return The byte array representing the CSV output file data
      */
     private byte[] getCSVOutput(List<String[]> lines, String sheetName) throws Exception
     {
@@ -207,6 +226,11 @@ public class OutputFile
 
     /**
      * Returns the XLS or XLSX output file data.
+     * @param columns The column definitions for the output file
+     * @param lines The lines to add to the output file
+     * @param sheetName The name of the worksheet
+     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+     * @return The XLS or XLSX output file data
      */
     private byte[] getExcelOutput(ReportColumn[] columns, 
         List<String[]> lines, String sheetName, boolean append) throws Exception
@@ -274,6 +298,7 @@ public class OutputFile
 
     /**
      * Sets an existing Workbook to which the sheet should be added.
+     * @param w The existing Workbook to which the sheet should be added
      */
     public void setExistingWorkbook(Workbook w)
     {
@@ -281,7 +306,8 @@ public class OutputFile
     }
 
     /**
-     * Sets an existing Workbook to which the sheet should be added.
+     * Returns an existing Workbook to which the sheet should be added.
+     * @return The existing Workbook to which the sheet should be added
      */
     public Workbook getExistingWorkbook()
     {
@@ -290,6 +316,7 @@ public class OutputFile
 
     /**
      * Returns the workbook created.
+     * @return The workbook created
      */
     public Workbook getWorkbook()
     {
@@ -298,6 +325,8 @@ public class OutputFile
 
     /**
      * Returns the workbook at the given file.
+     * @param file The file containing the name for the workbook
+     * @return The workbook created
      */
     public Workbook getWorkbook(File file)
     {
@@ -326,6 +355,9 @@ public class OutputFile
 
     /**
      * Returns the workbook at the given file.
+     * @param filename The name of the workbook
+     * @param stream The input stream for the workbook
+     * @return The workbook at the given file
      */
     public Workbook getWorkbook(String filename, InputStream stream)
     {

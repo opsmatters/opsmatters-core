@@ -27,7 +27,8 @@ import java.text.SimpleDateFormat;
 public class DateFormatPool
 {
     /**
-     * Default constructor.
+     * Constructor that takes a pool capacity.
+     * @param capacity The initial capacity of the pool
      */
     public DateFormatPool(int capacity)
     {
@@ -39,6 +40,7 @@ public class DateFormatPool
 
     /**
      * Fills the pool with a set of objects.
+     * @param size The number of objects to add to the pool
      */
     public void fill(int size)
     {
@@ -51,6 +53,7 @@ public class DateFormatPool
 
     /**
      * Add a new resource to the pool
+     * @param o The object to add
      */
     public void add(Object o)
     {
@@ -62,6 +65,7 @@ public class DateFormatPool
 
     /**
      * Retrieve a resource from the pool of free resources.
+     * @return The next available resource from the pool
      */
     public Object get()
     {
@@ -91,6 +95,8 @@ public class DateFormatPool
 
     /**
      * Retrieve a date format from the pool of free resources.
+     * @param format The date format to apply to the resource returned
+     * @return The next available date format from the pool of free resources
      */
     public SimpleDateFormat getFormat(String format)
     {
@@ -101,6 +107,7 @@ public class DateFormatPool
 
     /**
      * Release a resource and put it back in the pool of free resources.
+     * @param o The object to return to the pool
      */
     public void release(Object o)
     {
