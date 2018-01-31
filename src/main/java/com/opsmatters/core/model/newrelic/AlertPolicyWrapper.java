@@ -29,12 +29,12 @@ public class AlertPolicyWrapper implements NewRelicWrapper
 {
     private AlertPolicy policy;
     private List<AlertChannelWrapper> channels = new ArrayList<AlertChannelWrapper>();
-    private List<AlertConditionWrapper> conditions = new ArrayList<AlertConditionWrapper>();
-    private List<NrqlAlertConditionWrapper> nrqlConditions = new ArrayList<NrqlAlertConditionWrapper>();
-    private List<ExternalServiceAlertConditionWrapper> externalServiceConditions = new ArrayList<ExternalServiceAlertConditionWrapper>();
-    private List<SyntheticsAlertConditionWrapper> syntheticsConditions = new ArrayList<SyntheticsAlertConditionWrapper>();
-    private List<PluginsAlertConditionWrapper> pluginsConditions = new ArrayList<PluginsAlertConditionWrapper>();
-    private List<InfraAlertConditionWrapper> infraConditions = new ArrayList<InfraAlertConditionWrapper>();
+    private List<MetricConditionWrapper> conditions = new ArrayList<MetricConditionWrapper>();
+    private List<BaseConditionWrapper> nrqlConditions = new ArrayList<BaseConditionWrapper>();
+    private List<MetricConditionWrapper> externalServiceConditions = new ArrayList<MetricConditionWrapper>();
+    private List<BaseConditionWrapper> syntheticsConditions = new ArrayList<BaseConditionWrapper>();
+    private List<MetricConditionWrapper> pluginsConditions = new ArrayList<MetricConditionWrapper>();
+    private List<BaseConditionWrapper> infraConditions = new ArrayList<BaseConditionWrapper>();
 
     /**
      * Constructor that takes an alert policy.
@@ -94,7 +94,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given alert condition.
      * @param condition The alert condition to add
      */
-    public void addCondition(AlertConditionWrapper condition)
+    public void addCondition(MetricConditionWrapper condition)
     {
         conditions.add(condition);
     }
@@ -112,7 +112,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given NRQL alert condition.
      * @param condition The alert condition to add
      */
-    public void addNrqlCondition(NrqlAlertConditionWrapper condition)
+    public void addNrqlCondition(BaseConditionWrapper condition)
     {
         nrqlConditions.add(condition);
     }
@@ -130,7 +130,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given external service alert condition.
      * @param condition The alert condition to add
      */
-    public void addExternalServiceCondition(ExternalServiceAlertConditionWrapper condition)
+    public void addExternalServiceCondition(MetricConditionWrapper condition)
     {
         externalServiceConditions.add(condition);
     }
@@ -148,7 +148,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given Synthetics alert condition.
      * @param condition The alert condition to add
      */
-    public void addSyntheticsCondition(SyntheticsAlertConditionWrapper condition)
+    public void addSyntheticsCondition(BaseConditionWrapper condition)
     {
         syntheticsConditions.add(condition);
     }
@@ -166,7 +166,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given Plugins alert condition.
      * @param condition The alert condition to add
      */
-    public void addPluginsCondition(PluginsAlertConditionWrapper condition)
+    public void addPluginsCondition(MetricConditionWrapper condition)
     {
         pluginsConditions.add(condition);
     }
@@ -184,7 +184,7 @@ public class AlertPolicyWrapper implements NewRelicWrapper
      * Adds the given Infrastructure alert condition.
      * @param condition The alert condition to add
      */
-    public void addInfraCondition(InfraAlertConditionWrapper condition)
+    public void addInfraCondition(BaseConditionWrapper condition)
     {
         infraConditions.add(condition);
     }

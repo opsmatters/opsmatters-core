@@ -16,22 +16,22 @@
 
 package com.opsmatters.core.model.newrelic;
 
-import com.opsmatters.newrelic.api.model.alerts.conditions.SyntheticsAlertCondition;
+import com.opsmatters.newrelic.api.model.alerts.conditions.BaseCondition;
 
 /**
- * Represents a New Relic Synthetics alert condition.  
+ * Represents a New Relic base alert condition.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class SyntheticsAlertConditionWrapper implements NewRelicWrapper
+public class BaseConditionWrapper implements NewRelicWrapper
 {
-    private SyntheticsAlertCondition condition;
+    private BaseCondition condition;
 
     /**
      * Constructor that takes an alert condition.
      * @param condition The alert condition
      */
-    public SyntheticsAlertConditionWrapper(SyntheticsAlertCondition condition)
+    public BaseConditionWrapper(BaseCondition condition)
     {
         this.condition = condition;
     }
@@ -62,5 +62,4 @@ public class SyntheticsAlertConditionWrapper implements NewRelicWrapper
     {
         return condition.toString();
     }
-
 }

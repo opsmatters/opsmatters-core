@@ -16,51 +16,46 @@
 
 package com.opsmatters.core.model.newrelic;
 
-import com.opsmatters.newrelic.api.model.alerts.conditions.PluginsAlertCondition;
+import java.util.List;
+import java.util.ArrayList;
+import com.opsmatters.newrelic.api.model.alerts.conditions.MetricCondition;
 
 /**
- * Represents a New Relic Plugins alert condition.  
+ * Represents a New Relic metric alert condition.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class PluginsAlertConditionWrapper implements NewRelicWrapper
+public class MetricConditionWrapper extends BaseConditionWrapper
 {
-    private PluginsAlertCondition condition;
+    private MetricCondition condition;
+
+    private List<EntityWrapper> entities = new ArrayList<EntityWrapper>();
 
     /**
      * Constructor that takes an alert condition.
      * @param condition The alert condition
      */
-    public PluginsAlertConditionWrapper(PluginsAlertCondition condition)
+    public MetricConditionWrapper(MetricCondition condition)
     {
+        super(condition);
         this.condition = condition;
     }
 
     /**
-     * Returns the id of the condition.
-     * @return The id of the condition
+     * Adds the given entity.
+     * @param entity The entity to add
      */
-    public long getId()
+    public void addEntity(EntityWrapper entity)
     {
-        return condition.getId();
+        entities.add(entity);
     }
 
     /**
-     * Returns the name of the condition.
-     * @return The name of the condition
+     * Return the number of entities for the condition.
+     * @return The number of entities
      */
-    public String getName()
+    public int numEntities()
     {
-        return condition.getName();
+        return entities.size();
     }
-   
-    /**
-     * Returns a string representation of the object.
-     */
-    @Override
-    public String toString()
-    {
-        return condition.toString();
-    }
-
 }

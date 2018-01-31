@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang3.StringUtils;
 import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
 import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
-import com.opsmatters.core.model.newrelic.ApplicationWrapper;
+import com.opsmatters.core.model.newrelic.EntityWrapper;
 
 /**
  * Represents a cache containing a New Relic configuration.  
@@ -42,7 +42,10 @@ public class NewRelicCache extends ProviderCache
     private boolean servers = false;
     private Map<Long,AlertChannelWrapper> channels = new LinkedHashMap<Long,AlertChannelWrapper>();
     private Map<Long,AlertPolicyWrapper> policies = new LinkedHashMap<Long,AlertPolicyWrapper>();
-    private Map<Long,ApplicationWrapper> applications = new LinkedHashMap<Long,ApplicationWrapper>();
+    private Map<Long,EntityWrapper> applications = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,EntityWrapper> browserApplications = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,EntityWrapper> mobileApplications = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,EntityWrapper> entities = new LinkedHashMap<Long,EntityWrapper>();
 
     /**
      * Constructor that takes a provider.
@@ -254,6 +257,25 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
+     * Adds the alert channel to the alert channels for the account.
+     * @param channel The alert channel to add
+     */
+    public void addAlertChannel(AlertChannelWrapper channel)
+    {
+        channels.put(channel.getId(), channel);
+    }
+
+    /**
+     * Returns the alert channel for the given id.
+     * @param channelId The id of the alert channel
+     * @return The alert channel for the given id
+     */
+    public AlertChannelWrapper getAlertChannel(long channelId)
+    {
+        return channels.get(channelId);
+    }
+
+    /**
      * Returns the alert policies for the account.
      * @return The alert policies for the account
      */
@@ -263,12 +285,128 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
+     * Adds the alert policy to the alert policies for the account.
+     * @param policy The alert policy to add
+     */
+    public void addAlertPolicy(AlertPolicyWrapper policy)
+    {
+        policies.put(policy.getId(), policy);
+    }
+
+    /**
+     * Returns the alert policy for the given id.
+     * @param policyId The id of the alert policy
+     * @return The alert policy for the given id
+     */
+    public AlertPolicyWrapper getAlertPolicy(long policyId)
+    {
+        return policies.get(policyId);
+    }
+
+    /**
      * Returns the applications for the account.
      * @return The applications for the account
      */
-    public Map<Long,ApplicationWrapper> getApplications()
+    public Map<Long,EntityWrapper> getApplications()
     {
         return applications;
+    }
+
+    /**
+     * Adds the application to the applications for the account.
+     * @param application The application to add
+     */
+    public void addApplication(EntityWrapper application)
+    {
+        applications.put(application.getId(), application);
+        entities.put(application.getId(), application);
+    }
+
+    /**
+     * Returns the application for the given id.
+     * @param entityId The id of the application
+     * @return The application for the given id
+     */
+    public EntityWrapper getApplication(long entityId)
+    {
+        return applications.get(entityId);
+    }
+
+    /**
+     * Returns the browser applications for the account.
+     * @return The browser applications for the account
+     */
+    public Map<Long,EntityWrapper> getBrowserApplications()
+    {
+        return browserApplications;
+    }
+
+    /**
+     * Adds the browser application to the browser applications for the account.
+     * @param browserApplication The browser application to add
+     */
+    public void addBrowserApplication(EntityWrapper browserApplication)
+    {
+        browserApplications.put(browserApplication.getId(), browserApplication);
+        entities.put(browserApplication.getId(), browserApplication);
+    }
+
+    /**
+     * Returns the browser application for the given id.
+     * @param entityId The id of the browser application
+     * @return The browser application for the given id
+     */
+    public EntityWrapper getBrowserApplication(long entityId)
+    {
+        return browserApplications.get(entityId);
+    }
+
+    /**
+     * Returns the mobile applications for the account.
+     * @return The mobile applications for the account
+     */
+    public Map<Long,EntityWrapper> getMobileApplications()
+    {
+        return mobileApplications;
+    }
+
+    /**
+     * Adds the mobile application to the mobile applications for the account.
+     * @param mobileApplication The mobile application to add
+     */
+    public void addMobileApplication(EntityWrapper mobileApplication)
+    {
+        mobileApplications.put(mobileApplication.getId(), mobileApplication);
+        entities.put(mobileApplication.getId(), mobileApplication);
+    }
+
+    /**
+     * Returns the mobile application for the given id.
+     * @param entityId The id of the mobile application
+     * @return The mobile application for the given id
+     */
+    public EntityWrapper getMobileApplication(long entityId)
+    {
+        return mobileApplications.get(entityId);
+    }
+
+    /**
+     * Returns the entities for the account.
+     * @return The entities for the account
+     */
+    public Map<Long,EntityWrapper> getEntities()
+    {
+        return entities;
+    }
+
+    /**
+     * Returns the entity for the given id.
+     * @param entityId The id of the entity
+     * @return The entity for the given id
+     */
+    public EntityWrapper getEntity(long entityId)
+    {
+        return entities.get(entityId);
     }
 
     /**

@@ -16,42 +16,42 @@
 
 package com.opsmatters.core.model.newrelic;
 
-import com.opsmatters.newrelic.api.model.alerts.conditions.InfraAlertCondition;
+import com.opsmatters.newrelic.api.model.Entity;
 
 /**
- * Represents a New Relic Infrastructure alert condition.  
+ * Represents a New Relic entity.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class InfraAlertConditionWrapper implements NewRelicWrapper
+public class EntityWrapper implements NewRelicWrapper
 {
-    private InfraAlertCondition condition;
+    private Entity entity;
 
     /**
-     * Constructor that takes an alert condition.
-     * @param condition The alert condition
+     * Constructor that takes an entity.
+     * @param entity The entity
      */
-    public InfraAlertConditionWrapper(InfraAlertCondition condition)
+    public EntityWrapper(Entity entity)
     {
-        this.condition = condition;
+        this.entity = entity;
     }
 
     /**
-     * Returns the id of the condition.
-     * @return The id of the condition
+     * Returns the id of the entity.
+     * @return The id of the entity
      */
     public long getId()
     {
-        return condition.getId();
+        return entity.getId();
     }
 
     /**
-     * Returns the name of the condition.
-     * @return The name of the condition
+     * Returns the name of the entity.
+     * @return The name of the entity
      */
     public String getName()
     {
-        return condition.getName();
+        return entity.getName();
     }
    
     /**
@@ -60,7 +60,6 @@ public class InfraAlertConditionWrapper implements NewRelicWrapper
     @Override
     public String toString()
     {
-        return condition.toString();
+        return entity.toString();
     }
-
 }

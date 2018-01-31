@@ -23,22 +23,22 @@ import com.opsmatters.newrelic.api.NewRelicApi;
 import com.opsmatters.newrelic.api.NewRelicInfraApi;
 import com.opsmatters.newrelic.api.model.alerts.channels.AlertChannel;
 import com.opsmatters.newrelic.api.model.alerts.policies.AlertPolicy;
+import com.opsmatters.newrelic.api.model.alerts.conditions.MetricCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.AlertCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.NrqlAlertCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.ExternalServiceAlertCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.SyntheticsAlertCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.PluginsAlertCondition;
 import com.opsmatters.newrelic.api.model.alerts.conditions.InfraAlertCondition;
+import com.opsmatters.newrelic.api.model.Entity;
 import com.opsmatters.newrelic.api.model.applications.Application;
+import com.opsmatters.newrelic.api.model.applications.BrowserApplication;
+import com.opsmatters.newrelic.api.model.applications.MobileApplication;
 import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
 import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
-import com.opsmatters.core.model.newrelic.AlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.NrqlAlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.ExternalServiceAlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.SyntheticsAlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.PluginsAlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.InfraAlertConditionWrapper;
-import com.opsmatters.core.model.newrelic.ApplicationWrapper;
+import com.opsmatters.core.model.newrelic.BaseConditionWrapper;
+import com.opsmatters.core.model.newrelic.MetricConditionWrapper;
+import com.opsmatters.core.model.newrelic.EntityWrapper;
 
 /**
  * Represents a manager of a New Relic configuration.  
@@ -135,9 +135,9 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
         if(!ret)
             throw new IllegalStateException("cache not initialized");
         if(ret)
-            ret = syncAlerts(cache);
-        if(ret)
             ret = syncApplications(cache);
+        if(ret)
+            ret = syncAlerts(cache);
         return ret;
     }
 
@@ -166,20 +166,20 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             for(AlertPolicy policy : policies)
             {
                 AlertPolicyWrapper p = new AlertPolicyWrapper(policy);
-                cache.getAlertPolicies().put(policy.getId(), p);
+                cache.addAlertPolicy(p);
 
                 // Add the alert conditions
                 if(cache.isApmEnabled() || cache.isServersEnabled() || cache.isBrowserEnabled() || cache.isMobileEnabled())
-                    addAlertConditions(p);
-                addNrqlAlertConditions(p);
+                    addAlertConditions(p, cache);
+                addNrqlAlertConditions(p, cache);
                 if(cache.isApmEnabled() || cache.isMobileEnabled())
-                    addExternalServiceAlertConditions(p);
+                    addExternalServiceAlertConditions(p, cache);
                 if(cache.isSyntheticsEnabled())
-                    addSyntheticsAlertConditions(p);
+                    addSyntheticsAlertConditions(p, cache);
                 if(cache.isPluginsEnabled())
-                    addPluginsAlertConditions(p);
+                    addPluginsAlertConditions(p, cache);
                 if(cache.isInfrastructureEnabled())
-                    addInfraAlertConditions(p);
+                    addInfraAlertConditions(p, cache);
             }
 
             // Get the alert channels
@@ -188,13 +188,13 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             for(AlertChannel channel : channels)
             {
                 AlertChannelWrapper c = new AlertChannelWrapper(channel);
-                cache.getAlertChannels().put(channel.getId(), c);
+                cache.addAlertChannel(c);
 
                 // Add the channel to any policies it is associated with
                 List<Long> policyIds = channel.getLinks().getPolicyIds();
                 for(long policyId : policyIds)
                 {
-                    AlertPolicyWrapper policy = cache.getAlertPolicies().get(policyId);
+                    AlertPolicyWrapper policy = cache.getAlertPolicy(policyId);
                     if(policy != null)
                         policy.addChannel(c);
                     else
@@ -213,73 +213,100 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
     /**
      * Adds the alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addAlertConditions(AlertPolicyWrapper policy)
+    private void addAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the alert conditions for policy: "+policy.getId());
         Collection<AlertCondition> conditions = apiClient.alertConditions().list(policy.getId());
         for(AlertCondition condition : conditions)
-            policy.addCondition(new AlertConditionWrapper(condition));
+            policy.addCondition(getMetricConditionWrapper(condition, cache));
     }
 
     /**
      * Adds the NRQL alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addNrqlAlertConditions(AlertPolicyWrapper policy)
+    private void addNrqlAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the NRQL alert conditions for policy: "+policy.getId());
         Collection<NrqlAlertCondition> conditions = apiClient.nrqlAlertConditions().list(policy.getId());
         for(NrqlAlertCondition condition : conditions)
-            policy.addNrqlCondition(new NrqlAlertConditionWrapper(condition));
+            policy.addNrqlCondition(new BaseConditionWrapper(condition));
     }
 
     /**
      * Adds the external service alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addExternalServiceAlertConditions(AlertPolicyWrapper policy)
+    private void addExternalServiceAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the external service alert conditions for policy: "+policy.getId());
         Collection<ExternalServiceAlertCondition> conditions = apiClient.externalServiceAlertConditions().list(policy.getId());
         for(ExternalServiceAlertCondition condition : conditions)
-            policy.addExternalServiceCondition(new ExternalServiceAlertConditionWrapper(condition));
+            policy.addExternalServiceCondition(getMetricConditionWrapper(condition, cache));
     }
 
     /**
      * Adds the Synthetics alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addSyntheticsAlertConditions(AlertPolicyWrapper policy)
+    private void addSyntheticsAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the Synthetics alert conditions for policy: "+policy.getId());
         Collection<SyntheticsAlertCondition> conditions = apiClient.syntheticsAlertConditions().list(policy.getId());
         for(SyntheticsAlertCondition condition : conditions)
-            policy.addSyntheticsCondition(new SyntheticsAlertConditionWrapper(condition));
+            policy.addSyntheticsCondition(new BaseConditionWrapper(condition));
     }
 
     /**
      * Adds the Plugins alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addPluginsAlertConditions(AlertPolicyWrapper policy)
+    private void addPluginsAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the Plugins alert conditions for policy: "+policy.getId());
         Collection<PluginsAlertCondition> conditions = apiClient.pluginsAlertConditions().list(policy.getId());
         for(PluginsAlertCondition condition : conditions)
-            policy.addPluginsCondition(new PluginsAlertConditionWrapper(condition));
+            policy.addPluginsCondition(getMetricConditionWrapper(condition, cache));
     }
 
     /**
      * Adds the Infrastructure alert conditions to the given policy.
      * @param policy the policy to add the conditions to
+     * @param cache The provider cache
      */
-    private void addInfraAlertConditions(AlertPolicyWrapper policy)
+    private void addInfraAlertConditions(AlertPolicyWrapper policy, NewRelicCache cache)
     {
         logger.fine("Getting the Infrastructure alert conditions for policy: "+policy.getId());
         Collection<InfraAlertCondition> conditions = infraApiClient.infraAlertConditions().list(policy.getId());
         for(InfraAlertCondition condition : conditions)
-            policy.addInfraCondition(new InfraAlertConditionWrapper(condition));
+            policy.addInfraCondition(new BaseConditionWrapper(condition));
+    }
+
+    /**
+     * Creates a wrapper for the given alert condition, adding the associated entities.
+     * @param cache The provider cache
+     * @param condition The alert condition containing the entity ids
+     * @return The alert condition wrapper
+     */
+    private MetricConditionWrapper getMetricConditionWrapper(MetricCondition condition, NewRelicCache cache)
+    {
+        MetricConditionWrapper ret = new MetricConditionWrapper(condition);
+        List<Long> entities = condition.getEntities();
+        for(Long entityId : entities)
+        {
+            EntityWrapper entity = cache.getEntity(entityId);
+            if(entity == null)
+                logger.warning("Unable to find entity for condition: "+entityId);
+            ret.addEntity(entity);
+        }
+
+        return ret;
     }
 
     /**
@@ -306,8 +333,24 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             Collection<Application> applications = apiClient.applications().list();
             for(Application application : applications)
             {
-                ApplicationWrapper a = new ApplicationWrapper(application);
-                cache.getApplications().put(application.getId(), a);
+                EntityWrapper a = new EntityWrapper(application);
+                cache.addApplication(a);
+            }
+
+            logger.info("Getting the browser applications");
+            Collection<BrowserApplication> browserApplications = apiClient.browserApplications().list();
+            for(BrowserApplication application : browserApplications)
+            {
+                EntityWrapper a = new EntityWrapper(application);
+                cache.addBrowserApplication(a);
+            }
+
+            logger.info("Getting the mobile applications");
+            Collection<MobileApplication> mobileApplications = apiClient.mobileApplications().list();
+            for(MobileApplication application : mobileApplications)
+            {
+                EntityWrapper a = new EntityWrapper(application);
+                cache.addMobileApplication(a);
             }
 
             cache.setUpdatedAt();
