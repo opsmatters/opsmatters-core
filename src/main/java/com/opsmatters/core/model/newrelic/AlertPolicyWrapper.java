@@ -25,7 +25,7 @@ import com.opsmatters.newrelic.api.model.alerts.policies.AlertPolicy;
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class AlertPolicyWrapper implements NewRelicWrapper
+public class AlertPolicyWrapper implements ResourceIdWrapper
 {
     private AlertPolicy policy;
     private List<AlertChannelWrapper> channels = new ArrayList<AlertChannelWrapper>();

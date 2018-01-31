@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.logging.Logger;
 import com.opsmatters.newrelic.api.NewRelicApi;
 import com.opsmatters.newrelic.api.NewRelicInfraApi;
+import com.opsmatters.newrelic.api.NewRelicSyntheticsApi;
+import com.opsmatters.newrelic.api.services.PluginComponentService;
 import com.opsmatters.newrelic.api.model.alerts.channels.AlertChannel;
 import com.opsmatters.newrelic.api.model.alerts.policies.AlertPolicy;
 import com.opsmatters.newrelic.api.model.alerts.conditions.MetricCondition;
@@ -34,11 +36,29 @@ import com.opsmatters.newrelic.api.model.Entity;
 import com.opsmatters.newrelic.api.model.applications.Application;
 import com.opsmatters.newrelic.api.model.applications.BrowserApplication;
 import com.opsmatters.newrelic.api.model.applications.MobileApplication;
+import com.opsmatters.newrelic.api.model.applications.ApplicationHost;
+import com.opsmatters.newrelic.api.model.applications.ApplicationInstance;
+import com.opsmatters.newrelic.api.model.transactions.KeyTransaction;
+import com.opsmatters.newrelic.api.model.plugins.Plugin;
+import com.opsmatters.newrelic.api.model.plugins.PluginComponent;
+import com.opsmatters.newrelic.api.model.synthetics.Monitor;
+import com.opsmatters.newrelic.api.model.servers.Server;
+import com.opsmatters.newrelic.api.model.deployments.Deployment;
+import com.opsmatters.newrelic.api.model.labels.Label;
 import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
 import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
 import com.opsmatters.core.model.newrelic.BaseConditionWrapper;
 import com.opsmatters.core.model.newrelic.MetricConditionWrapper;
+import com.opsmatters.core.model.newrelic.ApplicationWrapper;
+import com.opsmatters.core.model.newrelic.ApplicationHostWrapper;
+import com.opsmatters.core.model.newrelic.ApplicationInstanceWrapper;
+import com.opsmatters.core.model.newrelic.KeyTransactionWrapper;
+import com.opsmatters.core.model.newrelic.PluginWrapper;
+import com.opsmatters.core.model.newrelic.PluginComponentWrapper;
 import com.opsmatters.core.model.newrelic.EntityWrapper;
+import com.opsmatters.core.model.newrelic.MonitorWrapper;
+import com.opsmatters.core.model.newrelic.DeploymentWrapper;
+import com.opsmatters.core.model.newrelic.LabelWrapper;
 
 /**
  * Represents a manager of a New Relic configuration.  
@@ -51,6 +71,7 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
 
     private NewRelicApi apiClient;
     private NewRelicInfraApi infraApiClient;
+    private NewRelicSyntheticsApi syntheticsApiClient;
     private boolean initialized = false;
 
     /**
@@ -87,6 +108,7 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
         {
             apiClient = NewRelicApi.builder().apiKey(apiKey).build();
             infraApiClient = NewRelicInfraApi.builder().apiKey(apiKey).build();
+            syntheticsApiClient = NewRelicSyntheticsApi.builder().apiKey(apiKey).build();
         }
 
         logger.info("Initialised the clients");
@@ -134,10 +156,22 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
         boolean ret = isInitialized();
         if(!ret)
             throw new IllegalStateException("cache not initialized");
+
+        clear(cache);
+
         if(ret)
             ret = syncApplications(cache);
         if(ret)
+            ret = syncPlugins(cache);
+        if(ret)
+            ret = syncMonitors(cache);
+        if(ret)
+            ret = syncServers(cache);
+        if(ret)
+            ret = syncLabels(cache);
+        if(ret)
             ret = syncAlerts(cache);
+
         return ret;
     }
 
@@ -157,8 +191,6 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
         if(cache.isAlertsEnabled())
         {
             ret = false;
-
-            cache.clearAlerts();
 
             // Get the alert policies
             logger.info("Getting the alert policies");
@@ -310,7 +342,7 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
     }
 
     /**
-     * Synchronise the APM configuration with the cache.
+     * Synchronise the application configuration with the cache.
      * @param cache The provider cache
      * @return <CODE>true</CODE> if the operation was successful
      */
@@ -322,35 +354,222 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             throw new IllegalArgumentException("null API client");
 
         // Get the application configuration using the REST API
-        if(cache.isApmEnabled())
+        if(cache.isApmEnabled() || cache.isBrowserEnabled() || cache.isMobileEnabled())
         {
             ret = false;
 
-            cache.clearApplications();
-
-            // Get the alert policies
-            logger.info("Getting the applications");
-            Collection<Application> applications = apiClient.applications().list();
-            for(Application application : applications)
+            if(cache.isApmEnabled())
             {
-                EntityWrapper a = new EntityWrapper(application);
-                cache.addApplication(a);
+                logger.info("Getting the applications");
+                Collection<Application> applications = apiClient.applications().list();
+                for(Application application : applications)
+                {
+                    ApplicationWrapper a = new ApplicationWrapper(application);
+                    cache.addApplication(a);
+
+                    logger.fine("Getting the hosts for application: "+application.getId());
+                    Collection<ApplicationHost> applicationHosts = apiClient.applicationHosts().list(application.getId());
+                    for(ApplicationHost applicationHost : applicationHosts)
+                        a.addApplicationHost(new ApplicationHostWrapper(applicationHost));
+
+                    logger.fine("Getting the instances for application: "+application.getId());
+                    Collection<ApplicationInstance> applicationInstances = apiClient.applicationInstances().list(application.getId());
+                    for(ApplicationInstance applicationInstance : applicationInstances)
+                    {
+                        ApplicationInstanceWrapper ai = new ApplicationInstanceWrapper(applicationInstance);
+                        long applicationHostId = applicationInstance.getLinks().getApplicationHost();
+                        ApplicationHostWrapper ah = a.getApplicationHost(applicationHostId);
+                        if(ah != null)
+                            ah.addApplicationInstance(ai);
+                        else
+                            logger.severe(String.format("Unable to find application instance for host '%s': %d", applicationInstance.getName(), applicationHostId));
+                    }
+
+                    logger.fine("Getting the deployments for application: "+application.getId());
+                    Collection<Deployment> deployments = apiClient.deployments().list(application.getId());
+                    for(Deployment deployment : deployments)
+                        a.addDeployment(new DeploymentWrapper(deployment));
+                }
+
+                // Get the key transaction configuration using the REST API
+                logger.info("Getting the key transactions");
+                Collection<KeyTransaction> keyTransactions = apiClient.keyTransactions().list();
+                for(KeyTransaction keyTransaction : keyTransactions)
+                {
+                    KeyTransactionWrapper kt = new KeyTransactionWrapper(keyTransaction);
+                    long applicationId = keyTransaction.getLinks().getApplication();
+                    ApplicationWrapper a = cache.getApplication(applicationId);
+                    if(a != null)
+                        a.addKeyTransaction(kt);
+                    else
+                        logger.severe(String.format("Unable to find application for key transaction '%s': %d", keyTransaction.getName(), applicationId));
+                }
             }
 
-            logger.info("Getting the browser applications");
-            Collection<BrowserApplication> browserApplications = apiClient.browserApplications().list();
-            for(BrowserApplication application : browserApplications)
+            if(cache.isBrowserEnabled())
             {
-                EntityWrapper a = new EntityWrapper(application);
-                cache.addBrowserApplication(a);
+                logger.info("Getting the browser applications");
+                Collection<BrowserApplication> browserApplications = apiClient.browserApplications().list();
+                for(BrowserApplication application : browserApplications)
+                    cache.addBrowserApplication(new EntityWrapper(application));
             }
 
-            logger.info("Getting the mobile applications");
-            Collection<MobileApplication> mobileApplications = apiClient.mobileApplications().list();
-            for(MobileApplication application : mobileApplications)
+            if(cache.isBrowserEnabled())
             {
-                EntityWrapper a = new EntityWrapper(application);
-                cache.addMobileApplication(a);
+                logger.info("Getting the mobile applications");
+                Collection<MobileApplication> mobileApplications = apiClient.mobileApplications().list();
+                for(MobileApplication application : mobileApplications)
+                    cache.addMobileApplication(new EntityWrapper(application));
+            }
+
+            cache.setUpdatedAt();
+
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * Synchronise the Plugins configuration with the cache.
+     * @param cache The provider cache
+     * @return <CODE>true</CODE> if the operation was successful
+     */
+    public boolean syncPlugins(NewRelicCache cache)
+    {
+        boolean ret = true;
+
+        if(apiClient == null)
+            throw new IllegalArgumentException("null API client");
+
+        // Get the Plugins configuration using the REST API
+        if(cache.isPluginsEnabled())
+        {
+            ret = false;
+
+            logger.info("Getting the plugins");
+            Collection<Plugin> plugins = apiClient.plugins().list(true);
+            for(Plugin plugin : plugins)
+            {
+                PluginWrapper p = new PluginWrapper(plugin);
+                cache.addPlugin(p);
+
+                logger.fine("Getting the components for plugin: "+plugin.getId());
+                Collection<PluginComponent> components = apiClient.pluginComponents().list(PluginComponentService.filters().pluginId(plugin.getId()).build());
+                for(PluginComponent component : components)
+                    p.addPluginComponent(new PluginComponentWrapper(component));
+            }
+
+            cache.setUpdatedAt();
+
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * Synchronise the Synthetics configuration with the cache.
+     * @param cache The provider cache
+     * @return <CODE>true</CODE> if the operation was successful
+     */
+    public boolean syncMonitors(NewRelicCache cache)
+    {
+        boolean ret = true;
+
+        if(apiClient == null)
+            throw new IllegalArgumentException("null API client");
+
+        // Get the Synthetics configuration using the REST API
+        if(cache.isSyntheticsEnabled())
+        {
+            ret = false;
+
+            logger.info("Getting the monitors");
+            Collection<Monitor> monitors = syntheticsApiClient.monitors().list();
+            for(Monitor monitor : monitors)
+                cache.addMonitor(new MonitorWrapper(monitor));
+
+            cache.setUpdatedAt();
+
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * Synchronise the server configuration with the cache.
+     * @param cache The provider cache
+     * @return <CODE>true</CODE> if the operation was successful
+     */
+    public boolean syncServers(NewRelicCache cache)
+    {
+        boolean ret = true;
+
+        if(apiClient == null)
+            throw new IllegalArgumentException("null API client");
+
+        // Get the server configuration using the REST API
+        if(cache.isServersEnabled())
+        {
+            ret = false;
+
+            logger.info("Getting the servers");
+            Collection<Server> servers = apiClient.servers().list();
+            for(Server server : servers)
+                cache.addServer(new EntityWrapper(server));
+
+            cache.setUpdatedAt();
+
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * Synchronise the label configuration with the cache.
+     * @param cache The provider cache
+     * @return <CODE>true</CODE> if the operation was successful
+     */
+    public boolean syncLabels(NewRelicCache cache)
+    {
+        boolean ret = true;
+
+        if(apiClient == null)
+            throw new IllegalArgumentException("null API client");
+
+        // Get the label configuration using the REST API
+        if(cache.isApmEnabled() || cache.isSyntheticsEnabled())
+        {
+            ret = false;
+
+            logger.info("Getting the labels");
+            Collection<Label> labels = apiClient.labels().list();
+            for(Label label : labels)
+            {
+                LabelWrapper l = new LabelWrapper(label);
+                List<Long> applicationIds = label.getLinks().getApplications();
+                for(long applicationId : applicationIds)
+                {
+                    ApplicationWrapper application = cache.getApplication(applicationId);
+                    if(application != null)
+                        application.addLabel(l);
+                    else
+                        logger.severe(String.format("Unable to find application for label '%s': %d", label.getName(), applicationId));
+                }
+
+                // Also check to see if this label is associated with any monitors
+                Collection<Monitor> monitors = syntheticsApiClient.monitors().list(label);
+                for(Monitor monitor : monitors)
+                {
+                    MonitorWrapper m = cache.getMonitor(monitor.getId());
+                    if(m != null)
+                        m.addLabel(l);
+                    else
+                        logger.severe(String.format("Unable to find monitor for label '%s': %d", label.getName(), monitor.getId()));
+                }
             }
 
             cache.setUpdatedAt();
@@ -368,7 +587,11 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
     {
         if(cache == null)
             throw new IllegalArgumentException("null cache");
-        cache.clearAlerts();
         cache.clearApplications();
+        cache.clearPlugins();
+        cache.clearMonitors();
+        cache.clearServers();
+        cache.clearEntities();
+        cache.clearAlerts();
     }
 }

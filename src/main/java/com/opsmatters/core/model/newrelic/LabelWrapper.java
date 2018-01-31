@@ -16,42 +16,44 @@
 
 package com.opsmatters.core.model.newrelic;
 
-import com.opsmatters.newrelic.api.model.Entity;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import com.opsmatters.newrelic.api.model.labels.Label;
 
 /**
- * Represents a New Relic entity.  
+ * Represents a New Relic label.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class EntityWrapper implements ResourceIdWrapper
+public class LabelWrapper implements ResourceWrapper
 {
-    private Entity entity;
+    private Label label;
 
     /**
-     * Constructor that takes an entity.
-     * @param entity The entity
+     * Constructor that takes a label.
+     * @param label The label
      */
-    public EntityWrapper(Entity entity)
+    public LabelWrapper(Label label)
     {
-        this.entity = entity;
+        this.label = label;
     }
 
     /**
-     * Returns the id of the entity.
-     * @return The id of the entity
+     * Returns the key of the label.
+     * @return The key of the label
      */
-    public long getId()
+    public String getKey()
     {
-        return entity.getId();
+        return label.getKey();
     }
 
     /**
-     * Returns the name of the entity.
-     * @return The name of the entity
+     * Returns the name of the label.
+     * @return The name of the label
      */
     public String getName()
     {
-        return entity.getName();
+        return label.getName();
     }
    
     /**
@@ -60,6 +62,6 @@ public class EntityWrapper implements ResourceIdWrapper
     @Override
     public String toString()
     {
-        return entity.toString();
+        return label.toString();
     }
 }

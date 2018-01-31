@@ -21,7 +21,9 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang3.StringUtils;
 import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
 import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
+import com.opsmatters.core.model.newrelic.ApplicationWrapper;
 import com.opsmatters.core.model.newrelic.EntityWrapper;
+import com.opsmatters.core.model.newrelic.MonitorWrapper;
 
 /**
  * Represents a cache containing a New Relic configuration.  
@@ -31,20 +33,23 @@ import com.opsmatters.core.model.newrelic.EntityWrapper;
 public class NewRelicCache extends ProviderCache
 {
     private String apiKey;
-    private boolean alerts = false;
-    private boolean apm = false;
-    private boolean browser = false;
-    private boolean synthetics = false;
-    private boolean mobile = false;
-    private boolean plugins = false;
-    private boolean insights = false;
-    private boolean infrastructure = false;
-    private boolean servers = false;
+    private boolean alertsEnabled = false;
+    private boolean apmEnabled = false;
+    private boolean browserEnabled = false;
+    private boolean syntheticsEnabled = false;
+    private boolean mobileEnabled = false;
+    private boolean pluginsEnabled = false;
+    private boolean insightsEnabled = false;
+    private boolean infrastructureEnabled = false;
+    private boolean serversEnabled = false;
     private Map<Long,AlertChannelWrapper> channels = new LinkedHashMap<Long,AlertChannelWrapper>();
     private Map<Long,AlertPolicyWrapper> policies = new LinkedHashMap<Long,AlertPolicyWrapper>();
-    private Map<Long,EntityWrapper> applications = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,ApplicationWrapper> applications = new LinkedHashMap<Long,ApplicationWrapper>();
     private Map<Long,EntityWrapper> browserApplications = new LinkedHashMap<Long,EntityWrapper>();
     private Map<Long,EntityWrapper> mobileApplications = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,EntityWrapper> servers = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,EntityWrapper> plugins = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<String,MonitorWrapper> monitors = new LinkedHashMap<String,MonitorWrapper>();
     private Map<Long,EntityWrapper> entities = new LinkedHashMap<Long,EntityWrapper>();
 
     /**
@@ -87,11 +92,11 @@ public class NewRelicCache extends ProviderCache
 
     /**
      * Set to <CODE>true</CODE> if the alert configuration should be included.
-     * @param alerts <CODE>true</CODE> if the alert configuration should be included
+     * @param alertsEnabled <CODE>true</CODE> if the alert configuration should be included
      */
-    public void setAlertsEnabled(boolean alerts)
+    public void setAlertsEnabled(boolean alertsEnabled)
     {
-        this.alerts = alerts;
+        this.alertsEnabled = alertsEnabled;
     }
 
     /**
@@ -100,16 +105,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isAlertsEnabled()
     {
-        return alerts;
+        return alertsEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the APM configuration should be included.
-     * @param apm <CODE>true</CODE> if the APM configuration should be included
+     * @param apmEnabled <CODE>true</CODE> if the APM configuration should be included
      */
-    public void setApmEnabled(boolean apm)
+    public void setApmEnabled(boolean apmEnabled)
     {
-        this.apm = apm;
+        this.apmEnabled = apmEnabled;
     }
 
     /**
@@ -118,16 +123,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isApmEnabled()
     {
-        return apm;
+        return apmEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Browser configuration should be included.
-     * @param browser <CODE>true</CODE> if the Browser configuration should be included
+     * @param browserEnabled <CODE>true</CODE> if the Browser configuration should be included
      */
-    public void setBrowserEnabled(boolean browser)
+    public void setBrowserEnabled(boolean browserEnabled)
     {
-        this.browser = browser;
+        this.browserEnabled = browserEnabled;
     }
 
     /**
@@ -136,16 +141,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isBrowserEnabled()
     {
-        return browser;
+        return browserEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Synthetics configuration should be included.
-     * @param synthetics <CODE>true</CODE> if the Synthetics configuration should be included
+     * @param syntheticsEnabled <CODE>true</CODE> if the Synthetics configuration should be included
      */
-    public void setSyntheticsEnabled(boolean synthetics)
+    public void setSyntheticsEnabled(boolean syntheticsEnabled)
     {
-        this.synthetics = synthetics;
+        this.syntheticsEnabled = syntheticsEnabled;
     }
 
     /**
@@ -154,16 +159,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isSyntheticsEnabled()
     {
-        return synthetics;
+        return syntheticsEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Mobile configuration should be included.
-     * @param mobile <CODE>true</CODE> if the Mobile configuration should be included
+     * @param mobileEnabled <CODE>true</CODE> if the Mobile configuration should be included
      */
-    public void setMobileEnabled(boolean mobile)
+    public void setMobileEnabled(boolean mobileEnabled)
     {
-        this.mobile = mobile;
+        this.mobileEnabled = mobileEnabled;
     }
 
     /**
@@ -172,16 +177,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isMobileEnabled()
     {
-        return mobile;
+        return mobileEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Plugins configuration should be included.
-     * @param plugins <CODE>true</CODE> if the Plugins configuration should be included
+     * @param pluginsEnabled <CODE>true</CODE> if the Plugins configuration should be included
      */
-    public void setPluginsEnabled(boolean plugins)
+    public void setPluginsEnabled(boolean pluginsEnabled)
     {
-        this.plugins = plugins;
+        this.pluginsEnabled = pluginsEnabled;
     }
 
     /**
@@ -190,16 +195,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isPluginsEnabled()
     {
-        return plugins;
+        return pluginsEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Insights configuration should be included.
-     * @param insights <CODE>true</CODE> if the Insights configuration should be included
+     * @param insightsEnabled <CODE>true</CODE> if the Insights configuration should be included
      */
-    public void setInsightsEnabled(boolean insights)
+    public void setInsightsEnabled(boolean insightsEnabled)
     {
-        this.insights = insights;
+        this.insightsEnabled = insightsEnabled;
     }
 
     /**
@@ -208,16 +213,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isInsightsEnabled()
     {
-        return insights;
+        return insightsEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Infrastructure configuration should be included.
-     * @param infrastructure <CODE>true</CODE> if the Infrastructure configuration should be included
+     * @param infrastructureEnabled <CODE>true</CODE> if the Infrastructure configuration should be included
      */
-    public void setInfrastructureEnabled(boolean infrastructure)
+    public void setInfrastructureEnabled(boolean infrastructureEnabled)
     {
-        this.infrastructure = infrastructure;
+        this.infrastructureEnabled = infrastructureEnabled;
     }
 
     /**
@@ -226,16 +231,16 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isInfrastructureEnabled()
     {
-        return infrastructure;
+        return infrastructureEnabled;
     }
 
     /**
      * Set to <CODE>true</CODE> if the Servers configuration should be included.
-     * @param servers <CODE>true</CODE> if the Servers configuration should be included
+     * @param serversEnabled <CODE>true</CODE> if the Servers configuration should be included
      */
-    public void setServersEnabled(boolean servers)
+    public void setServersEnabled(boolean serversEnabled)
     {
-        this.servers = servers;
+        this.serversEnabled = serversEnabled;
     }
 
     /**
@@ -244,7 +249,7 @@ public class NewRelicCache extends ProviderCache
      */
     public boolean isServersEnabled()
     {
-        return servers;
+        return serversEnabled;
     }
    
     /**
@@ -307,7 +312,7 @@ public class NewRelicCache extends ProviderCache
      * Returns the applications for the account.
      * @return The applications for the account
      */
-    public Map<Long,EntityWrapper> getApplications()
+    public Map<Long,ApplicationWrapper> getApplications()
     {
         return applications;
     }
@@ -316,7 +321,7 @@ public class NewRelicCache extends ProviderCache
      * Adds the application to the applications for the account.
      * @param application The application to add
      */
-    public void addApplication(EntityWrapper application)
+    public void addApplication(ApplicationWrapper application)
     {
         applications.put(application.getId(), application);
         entities.put(application.getId(), application);
@@ -327,7 +332,7 @@ public class NewRelicCache extends ProviderCache
      * @param entityId The id of the application
      * @return The application for the given id
      */
-    public EntityWrapper getApplication(long entityId)
+    public ApplicationWrapper getApplication(long entityId)
     {
         return applications.get(entityId);
     }
@@ -391,6 +396,92 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
+     * Returns the plugins for the account.
+     * @return The plugins for the account
+     */
+    public Map<Long,EntityWrapper> getPlugins()
+    {
+        return plugins;
+    }
+
+    /**
+     * Adds the plugin to the plugins for the account.
+     * @param plugin The plugin to add
+     */
+    public void addPlugin(EntityWrapper plugin)
+    {
+        plugins.put(plugin.getId(), plugin);
+        entities.put(plugin.getId(), plugin);
+    }
+
+    /**
+     * Returns the plugin for the given id.
+     * @param entityId The id of the plugin
+     * @return The plugin for the given id
+     */
+    public EntityWrapper getPlugin(long entityId)
+    {
+        return plugins.get(entityId);
+    }
+
+    /**
+     * Returns the monitors for the account.
+     * @return The monitors for the account
+     */
+    public Map<String,MonitorWrapper> getMonitors()
+    {
+        return monitors;
+    }
+
+    /**
+     * Adds the monitor to the monitors for the account.
+     * @param monitor The monitor to add
+     */
+    public void addMonitor(MonitorWrapper monitor)
+    {
+        monitors.put(monitor.getId(), monitor);
+    }
+
+    /**
+     * Returns the monitor for the given id.
+     * @param monitorId The id of the monitor
+     * @return The monitor for the given id
+     */
+    public MonitorWrapper getMonitor(String monitorId)
+    {
+        return monitors.get(monitorId);
+    }
+
+    /**
+     * Returns the servers for the account.
+     * @return The servers for the account
+     */
+    public Map<Long,EntityWrapper> getServers()
+    {
+        return servers;
+    }
+
+    /**
+     * Adds the server to the servers for the account.
+     * @param server The server to add
+     */
+    public void addServer(EntityWrapper server)
+    {
+        servers.put(server.getId(), server);
+        entities.put(server.getId(), server);
+    }
+
+    /**
+     * Returns the server for the given id.
+     * @param entityId The id of the server
+     * @return The server for the given id
+     */
+    public EntityWrapper getServer(long entityId)
+    {
+        return servers.get(entityId);
+    }
+
+    /**
      * Returns the entities for the account.
      * @return The entities for the account
      */
@@ -419,11 +510,45 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
-     * Clear the Application configuration.
+     * Clear the applications.
      */
     public void clearApplications()
     {
         applications.clear();
+        browserApplications.clear();
+        mobileApplications.clear();
+    }
+
+    /**
+     * Clear the plugins.
+     */
+    public void clearPlugins()
+    {
+        plugins.clear();
+    }
+
+    /**
+     * Clear the monitors.
+     */
+    public void clearMonitors()
+    {
+        monitors.clear();
+    }
+
+    /**
+     * Clear the servers.
+     */
+    public void clearServers()
+    {
+        servers.clear();
+    }
+
+    /**
+     * Clear the entities.
+     */
+    public void clearEntities()
+    {
+        entities.clear();
     }
 
     /**
@@ -437,6 +562,12 @@ public class NewRelicCache extends ProviderCache
             +", channels="+channels.size()
             +", policies="+policies.size()
             +", applications="+applications.size()
+            +", browserApplications="+browserApplications.size()
+            +", mobileApplications="+mobileApplications.size()
+            +", servers="+servers.size()
+            +", plugins="+plugins.size()
+            +", monitors="+monitors.size()
+            +", entities="+entities.size()
             +"]";
     }
 

@@ -23,7 +23,7 @@ import com.opsmatters.newrelic.api.model.alerts.conditions.BaseCondition;
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class BaseConditionWrapper implements NewRelicWrapper
+public class BaseConditionWrapper implements ResourceIdWrapper
 {
     private BaseCondition condition;
 

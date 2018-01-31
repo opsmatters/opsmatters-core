@@ -23,7 +23,7 @@ import com.opsmatters.newrelic.api.model.alerts.channels.AlertChannel;
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class AlertChannelWrapper implements NewRelicWrapper
+public class AlertChannelWrapper implements ResourceIdWrapper
 {
     private AlertChannel channel;
 

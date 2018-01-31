@@ -46,7 +46,7 @@ public class ProviderTest
         // Initialise the cache
         logger.info("Initialise the cache");
         ProviderManager manager = ProviderFactory.getManager(Provider.NEW_RELIC);
-        NewRelicCache cache = NewRelicCache.builder().apiKey(apiKey).alerts(true).apm(true).build();
+        NewRelicCache cache = NewRelicCache.builder().apiKey(apiKey).alerts(true).apm(true).synthetics(true).build();
         manager.sync(cache);
 
         logger.info("Check the cache: "+cache);
@@ -55,6 +55,7 @@ public class ProviderTest
         Assert.assertTrue(cache.getAlertChannels().size() > 0);
         Assert.assertTrue(cache.getAlertPolicies().size() > 0);
         Assert.assertTrue(cache.getApplications().size() > 0);
+        Assert.assertTrue(cache.getMonitors().size() > 0);
 
         logger.info("Completed test: "+testName);
     }

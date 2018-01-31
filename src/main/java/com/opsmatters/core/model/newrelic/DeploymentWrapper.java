@@ -16,42 +16,44 @@
 
 package com.opsmatters.core.model.newrelic;
 
-import com.opsmatters.newrelic.api.model.Entity;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import com.opsmatters.newrelic.api.model.deployments.Deployment;
 
 /**
- * Represents a New Relic entity.  
+ * Represents a New Relic deployment.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class EntityWrapper implements ResourceIdWrapper
+public class DeploymentWrapper implements ResourceIdWrapper
 {
-    private Entity entity;
+    private Deployment deployment;
 
     /**
-     * Constructor that takes an entity.
-     * @param entity The entity
+     * Constructor that takes a deployment.
+     * @param deployment The deployment
      */
-    public EntityWrapper(Entity entity)
+    public DeploymentWrapper(Deployment deployment)
     {
-        this.entity = entity;
+        this.deployment = deployment;
     }
 
     /**
-     * Returns the id of the entity.
-     * @return The id of the entity
+     * Returns the id of the deployment.
+     * @return The id of the deployment
      */
     public long getId()
     {
-        return entity.getId();
+        return deployment.getId();
     }
 
     /**
-     * Returns the name of the entity.
-     * @return The name of the entity
+     * Returns the name of the deployment.
+     * @return The name of the deployment
      */
     public String getName()
     {
-        return entity.getName();
+        return deployment.getRevision();
     }
    
     /**
@@ -60,6 +62,6 @@ public class EntityWrapper implements ResourceIdWrapper
     @Override
     public String toString()
     {
-        return entity.toString();
+        return deployment.toString();
     }
 }

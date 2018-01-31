@@ -16,22 +16,26 @@
 
 package com.opsmatters.core.model.newrelic;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
+import com.opsmatters.newrelic.api.model.plugins.PluginComponent;
+
 /**
- * Represents a New Relic configuration resource.  
+ * Represents a New Relic plugin component.  
  * 
  * @author Gerald Curley (opsmatters)
  */
-public interface NewRelicWrapper
+public class PluginComponentWrapper extends EntityWrapper
 {
-    /**
-     * Returns the id of the resource.
-     * @return The id of the resource
-     */
-    public long getId();
+    private PluginComponent component;
 
     /**
-     * Returns the name of the resource.
-     * @return The name of the resource
+     * Constructor that takes an plugin component.
+     * @param component The plugin component
      */
-    public String getName();
+    public PluginComponentWrapper(PluginComponent component)
+    {
+        super(component);
+        this.component = component;
+    }
 }
