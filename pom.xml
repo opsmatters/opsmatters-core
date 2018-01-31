@@ -4,9 +4,9 @@
   <artifactId>opsmatters-core</artifactId>
   <version>0.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>opsmatters core</name>
+  <name>OpsMatters Core</name>
   <description>
-    Core library for the opsmatters suite including models and utilities.
+    Core library for the opsmatters suite including providers, models, caches, reporting and command line utilities.
   </description>
   <url>https://github.com/opsmatters/opsmatters-core</url>
 
