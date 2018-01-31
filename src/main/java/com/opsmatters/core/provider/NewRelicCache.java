@@ -24,6 +24,7 @@ import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
 import com.opsmatters.core.model.newrelic.ApplicationWrapper;
 import com.opsmatters.core.model.newrelic.EntityWrapper;
 import com.opsmatters.core.model.newrelic.MonitorWrapper;
+import com.opsmatters.core.model.newrelic.DashboardWrapper;
 
 /**
  * Represents a cache containing a New Relic configuration.  
@@ -51,6 +52,7 @@ public class NewRelicCache extends ProviderCache
     private Map<Long,EntityWrapper> plugins = new LinkedHashMap<Long,EntityWrapper>();
     private Map<String,MonitorWrapper> monitors = new LinkedHashMap<String,MonitorWrapper>();
     private Map<Long,EntityWrapper> entities = new LinkedHashMap<Long,EntityWrapper>();
+    private Map<Long,DashboardWrapper> dashboards = new LinkedHashMap<Long,DashboardWrapper>();
 
     /**
      * Constructor that takes a provider.
@@ -501,6 +503,34 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
+     * Returns the dashboards for the account.
+     * @return The dashboards for the account
+     */
+    public Map<Long,DashboardWrapper> getDashboards()
+    {
+        return dashboards;
+    }
+
+    /**
+     * Adds the dashboard to the dashboards for the account.
+     * @param dashboard The dashboard to add
+     */
+    public void addDashboard(DashboardWrapper dashboard)
+    {
+        dashboards.put(dashboard.getId(), dashboard);
+    }
+
+    /**
+     * Returns the dashboard for the given id.
+     * @param dashboardId The id of the dashboard
+     * @return The dashboard for the given id
+     */
+    public DashboardWrapper getDashboard(long dashboardId)
+    {
+        return dashboards.get(dashboardId);
+    }
+
+    /**
      * Clear the alerts configuration.
      */
     public void clearAlerts()
@@ -552,6 +582,14 @@ public class NewRelicCache extends ProviderCache
     }
 
     /**
+     * Clear the dashboards.
+     */
+    public void clearDashboards()
+    {
+        dashboards.clear();
+    }
+
+    /**
      * Returns a string representation of the object.
      */
     @Override
@@ -568,6 +606,7 @@ public class NewRelicCache extends ProviderCache
             +", plugins="+plugins.size()
             +", monitors="+monitors.size()
             +", entities="+entities.size()
+            +", dashboards="+dashboards.size()
             +"]";
     }
 

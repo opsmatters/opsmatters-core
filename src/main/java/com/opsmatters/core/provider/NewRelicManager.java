@@ -45,6 +45,7 @@ import com.opsmatters.newrelic.api.model.synthetics.Monitor;
 import com.opsmatters.newrelic.api.model.servers.Server;
 import com.opsmatters.newrelic.api.model.deployments.Deployment;
 import com.opsmatters.newrelic.api.model.labels.Label;
+import com.opsmatters.newrelic.api.model.insights.Dashboard;
 import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
 import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
 import com.opsmatters.core.model.newrelic.BaseConditionWrapper;
@@ -59,6 +60,7 @@ import com.opsmatters.core.model.newrelic.EntityWrapper;
 import com.opsmatters.core.model.newrelic.MonitorWrapper;
 import com.opsmatters.core.model.newrelic.DeploymentWrapper;
 import com.opsmatters.core.model.newrelic.LabelWrapper;
+import com.opsmatters.core.model.newrelic.DashboardWrapper;
 
 /**
  * Represents a manager of a New Relic configuration.  
@@ -171,6 +173,8 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             ret = syncLabels(cache);
         if(ret)
             ret = syncAlerts(cache);
+        if(ret)
+            ret = syncDashboards(cache);
 
         return ret;
     }
@@ -581,6 +585,36 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
     }
 
     /**
+     * Synchronise the dashboard configuration with the cache.
+     * @param cache The provider cache
+     * @return <CODE>true</CODE> if the operation was successful
+     */
+    public boolean syncDashboards(NewRelicCache cache)
+    {
+        boolean ret = true;
+
+        if(apiClient == null)
+            throw new IllegalArgumentException("null API client");
+
+        // Get the dashboard configuration using the REST API
+        if(cache.isInsightsEnabled())
+        {
+            ret = false;
+
+            logger.info("Getting the dashboards");
+            Collection<Dashboard> dashboards = apiClient.dashboards().list();
+            for(Dashboard dashboard : dashboards)
+                cache.addDashboard(new DashboardWrapper(dashboard));
+
+            cache.setUpdatedAt();
+
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
      * Clears the cache.
      */
     public void clear(NewRelicCache cache)
@@ -593,5 +627,6 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
         cache.clearServers();
         cache.clearEntities();
         cache.clearAlerts();
+        cache.clearDashboards();
     }
 }
