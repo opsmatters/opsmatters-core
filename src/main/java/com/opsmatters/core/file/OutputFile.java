@@ -34,6 +34,7 @@ public class OutputFile
 {
     private static final Logger logger = Logger.getLogger(OutputFile.class.getName());
 
+    private String filename = "";
     private short format = CSV_FORMAT;
     private CSVWriter csv = null;
     private Workbook existing = null;
@@ -65,6 +66,7 @@ public class OutputFile
      */
     public OutputFile(String filename)
     {
+        this.filename = filename;
         this.format = getFileType(filename);
     }
 
@@ -75,6 +77,15 @@ public class OutputFile
     public OutputFile(short format)
     {
         this.format = format;
+    }
+
+    /**
+     * Returns the name of the file.
+     * @return The name of the file
+     */
+    public String getFilename()
+    {
+        return filename;
     }
 
     /**
