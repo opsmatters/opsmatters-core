@@ -13,7 +13,10 @@ TBC
 
 ## Prerequisites
 
-TBC
+A New Relic account with an Admin user.
+The user needs to generate an [Admin API Key](https://docs.newrelic.com/docs/apis/rest-api-v2/getting-started/api-keys) 
+to provide read-write access via the [New Relic REST APIs](https://api.newrelic.com).
+The Admin API Key is referenced in the documentation as the parameter "YOUR_API_KEY".
 
 ## Installing
 
@@ -37,7 +40,7 @@ mvn clean test
 
 The following tests are included:
 
-TBC
+* ProviderTest: Creates a full NewRelicCache with all the available configuration items and then creates some test reports for the objects in a variety of formats.
 
 ## Deployment
 
@@ -48,13 +51,18 @@ Add the following dependency to include the artefact within your project:
 <dependency>
   <groupId>com.opsmatters</groupId>
   <artifactId>opsmatters-core</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
 ## Built With
 
-TBC
+* [newrelic-api](https://github.com/opsmatters/newrelic-api) - Java client library for the New Relic Monitoring and Alerting REST APIs
+* [docx4j](https://www.docx4java.org/trac/docx4j) - Java library for creating and manipulating Microsoft Open XML files
+* [jxl](http://jexcelapi.sourceforge.net/) - Java API enabling developers to read, write, and modify Excel spreadsheets
+* [opencsv](http://opencsv.sourceforge.net/) - CSV parser library for Java
+* [Maven](https://maven.apache.org/) - Dependency Management
+* [JUnit](http://http://junit.org/) - Unit testing framework
 
 ## Contributing
 
