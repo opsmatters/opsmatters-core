@@ -11,7 +11,6 @@ Core library for the opsmatters suite including providers, models, caches, repor
 
 To obtain a New Relic cache instance containing all the static configuration:
 ```
-ProviderManager manager = ProviderFactory.getManager(Provider.NEW_RELIC);
 NewRelicCache cache = NewRelicCache.builder()
     .apiKey("<YOUR_API_KEY>")
     .alerts(true)
@@ -25,8 +24,9 @@ NewRelicCache cache = NewRelicCache.builder()
     .infrastructure(true)
     .build();
 ```
-Next, to synchronise the cache with New Relic by importing all resources for the enabled products:
+Next, create a manager to synchronise the cache with New Relic by importing all resources for the enabled products:
 ```
+ProviderManager manager = ProviderFactory.getManager(Provider.NEW_RELIC);
 boolean success = manager.sync(cache);
 ```
 Once the cache has been populated, it can be queried for the resources and collections it contains. Here are some examples:
