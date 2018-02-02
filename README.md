@@ -1,6 +1,6 @@
 ![opsmatters](https://i.imgur.com/VoLABc1.png)
 
-# opsmatters Core
+# OpsMatters Core
 [![Build Status](https://travis-ci.org/opsmatters/opsmatters-core.svg?branch=master)](https://travis-ci.org/opsmatters/opsmatters-core)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.opsmatters/opsmatters-core/badge.svg?style=blue)](https://maven-badges.herokuapp.com/maven-central/com.opsmatters/opsmatters-core)
 [![Javadocs](http://javadoc.io/badge/com.opsmatters/opsmatters-core.svg)](http://javadoc.io/doc/com.opsmatters/opsmatters-core)
@@ -62,7 +62,7 @@ Add the following dependency to include the artefact within your project:
 * [jxl](http://jexcelapi.sourceforge.net/) - Java API enabling developers to read, write, and modify Excel spreadsheets
 * [opencsv](http://opencsv.sourceforge.net/) - CSV parser library for Java
 * [Maven](https://maven.apache.org/) - Dependency Management
-* [JUnit](http://http://junit.org/) - Unit testing framework
+* [JUnit](http://junit.org/) - Unit testing framework
 
 ## Contributing
 
