@@ -9,7 +9,49 @@ Core library for the opsmatters suite including providers, models, caches, repor
 
 ## Examples
 
-TBC
+To obtain a New Relic cache instance containing all the static configuration:
+```
+ProviderManager manager = ProviderFactory.getManager(Provider.NEW_RELIC);
+NewRelicCache cache = NewRelicCache.builder()
+    .apiKey("<YOUR_API_KEY>")
+    .alerts(true)
+    .apm(true)
+    .mobile(true)
+    .browser(true)
+    .synthetics(true)
+    .insights(true)
+    .servers(true)
+    .plugins(true)
+    .infrastructure(true)
+    .build();
+```
+Next, to synchronise the cache with New Relic by importing all resources for the enabled products:
+```
+boolean success = manager.sync(cache);
+```
+Once the cache has been populated, it can be queried for the resources and collections it contains. Here are some examples:
+
+* To query the alert channels:
+```
+Collection<AlertChannel> channels = cache.alertChannels().list();
+```
+* To query the alert policies:
+```
+Collection<AlertPolicy> policies = cache.alertPolicies().list();
+```
+* To query the APM alert conditions for a particular alert policy:
+```
+Collection<AlertCondition> conditions = cache.alertPolicies().alertConditions(policy.getId()).list()
+```
+```
+* To query the Infrastructure alert conditions for a particular alert policy:
+```
+Collection<InfraAlertCondition> infraConditions = cache.alertPolicies().infraAlertConditions(policy.getId()).list()
+```
+* To query the dashboards:
+```
+Collection<Dashboard> dashboards = cache.dashboards().list();
+```
 
 ## Prerequisites
 
