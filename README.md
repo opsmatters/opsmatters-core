@@ -43,7 +43,6 @@ Collection<AlertPolicy> policies = cache.alertPolicies().list();
 ```
 Collection<AlertCondition> conditions = cache.alertPolicies().alertConditions(policy.getId()).list()
 ```
-```
 * To query the Infrastructure alert conditions for a particular alert policy:
 ```
 Collection<InfraAlertCondition> infraConditions = cache.alertPolicies().infraAlertConditions(policy.getId()).list()
