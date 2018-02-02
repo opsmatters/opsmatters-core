@@ -19,12 +19,16 @@ package com.opsmatters.core.provider;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import org.apache.commons.lang3.StringUtils;
-import com.opsmatters.core.model.newrelic.AlertChannelWrapper;
-import com.opsmatters.core.model.newrelic.AlertPolicyWrapper;
-import com.opsmatters.core.model.newrelic.ApplicationWrapper;
-import com.opsmatters.core.model.newrelic.EntityWrapper;
-import com.opsmatters.core.model.newrelic.MonitorWrapper;
-import com.opsmatters.core.model.newrelic.DashboardWrapper;
+import com.opsmatters.core.provider.newrelic.AlertChannelCache;
+import com.opsmatters.core.provider.newrelic.AlertPolicyCache;
+import com.opsmatters.core.provider.newrelic.ApplicationCache;
+import com.opsmatters.core.provider.newrelic.BrowserApplicationCache;
+import com.opsmatters.core.provider.newrelic.MobileApplicationCache;
+import com.opsmatters.core.provider.newrelic.ServerCache;
+import com.opsmatters.core.provider.newrelic.PluginCache;
+import com.opsmatters.core.provider.newrelic.MonitorCache;
+import com.opsmatters.core.provider.newrelic.EntityCache;
+import com.opsmatters.core.provider.newrelic.DashboardCache;
 
 /**
  * Represents a cache containing a New Relic configuration.  
@@ -43,16 +47,16 @@ public class NewRelicCache extends ProviderCache
     private boolean insightsEnabled = false;
     private boolean infrastructureEnabled = false;
     private boolean serversEnabled = false;
-    private Map<Long,AlertChannelWrapper> channels = new LinkedHashMap<Long,AlertChannelWrapper>();
-    private Map<Long,AlertPolicyWrapper> policies = new LinkedHashMap<Long,AlertPolicyWrapper>();
-    private Map<Long,ApplicationWrapper> applications = new LinkedHashMap<Long,ApplicationWrapper>();
-    private Map<Long,EntityWrapper> browserApplications = new LinkedHashMap<Long,EntityWrapper>();
-    private Map<Long,EntityWrapper> mobileApplications = new LinkedHashMap<Long,EntityWrapper>();
-    private Map<Long,EntityWrapper> servers = new LinkedHashMap<Long,EntityWrapper>();
-    private Map<Long,EntityWrapper> plugins = new LinkedHashMap<Long,EntityWrapper>();
-    private Map<String,MonitorWrapper> monitors = new LinkedHashMap<String,MonitorWrapper>();
-    private Map<Long,EntityWrapper> entities = new LinkedHashMap<Long,EntityWrapper>();
-    private Map<Long,DashboardWrapper> dashboards = new LinkedHashMap<Long,DashboardWrapper>();
+    private AlertChannelCache alertChannels = new AlertChannelCache();
+    private AlertPolicyCache alertPolicies = new AlertPolicyCache();
+    private ApplicationCache applications = new ApplicationCache();
+    private BrowserApplicationCache browserApplications = new BrowserApplicationCache();
+    private MobileApplicationCache mobileApplications = new MobileApplicationCache();
+    private ServerCache servers = new ServerCache();
+    private PluginCache plugins = new PluginCache();
+    private MonitorCache monitors = new MonitorCache();
+    private EntityCache entities = new EntityCache();
+    private DashboardCache dashboards = new DashboardCache();
 
     /**
      * Constructor that takes a provider.
@@ -255,338 +259,93 @@ public class NewRelicCache extends ProviderCache
     }
    
     /**
-     * Returns the alert channels for the account.
-     * @return The alert channels for the account
+     * Returns the alert channel cache.
+     * @return The alert channel cache
      */
-    public Map<Long,AlertChannelWrapper> getAlertChannels()
+    public AlertChannelCache alertChannels()
     {
-        return channels;
+        return alertChannels;
     }
 
     /**
-     * Adds the alert channel to the alert channels for the account.
-     * @param channel The alert channel to add
+     * Returns the alert policy cache.
+     * @return The alert policy cache
      */
-    public void addAlertChannel(AlertChannelWrapper channel)
+    public AlertPolicyCache alertPolicies()
     {
-        channels.put(channel.getId(), channel);
+        return alertPolicies;
     }
 
     /**
-     * Returns the alert channel for the given id.
-     * @param channelId The id of the alert channel
-     * @return The alert channel for the given id
+     * Returns the application cache.
+     * @return The application cache
      */
-    public AlertChannelWrapper getAlertChannel(long channelId)
-    {
-        return channels.get(channelId);
-    }
-
-    /**
-     * Returns the alert policies for the account.
-     * @return The alert policies for the account
-     */
-    public Map<Long,AlertPolicyWrapper> getAlertPolicies()
-    {
-        return policies;
-    }
-
-    /**
-     * Adds the alert policy to the alert policies for the account.
-     * @param policy The alert policy to add
-     */
-    public void addAlertPolicy(AlertPolicyWrapper policy)
-    {
-        policies.put(policy.getId(), policy);
-    }
-
-    /**
-     * Returns the alert policy for the given id.
-     * @param policyId The id of the alert policy
-     * @return The alert policy for the given id
-     */
-    public AlertPolicyWrapper getAlertPolicy(long policyId)
-    {
-        return policies.get(policyId);
-    }
-
-    /**
-     * Returns the applications for the account.
-     * @return The applications for the account
-     */
-    public Map<Long,ApplicationWrapper> getApplications()
+    public ApplicationCache applications()
     {
         return applications;
     }
 
     /**
-     * Adds the application to the applications for the account.
-     * @param application The application to add
+     * Returns the browser application cache.
+     * @return The browser application cache
      */
-    public void addApplication(ApplicationWrapper application)
-    {
-        applications.put(application.getId(), application);
-        entities.put(application.getId(), application);
-    }
-
-    /**
-     * Returns the application for the given id.
-     * @param entityId The id of the application
-     * @return The application for the given id
-     */
-    public ApplicationWrapper getApplication(long entityId)
-    {
-        return applications.get(entityId);
-    }
-
-    /**
-     * Returns the browser applications for the account.
-     * @return The browser applications for the account
-     */
-    public Map<Long,EntityWrapper> getBrowserApplications()
+    public BrowserApplicationCache browserApplications()
     {
         return browserApplications;
     }
 
     /**
-     * Adds the browser application to the browser applications for the account.
-     * @param browserApplication The browser application to add
+     * Returns the mobile application cache.
+     * @return The mobile application cache
      */
-    public void addBrowserApplication(EntityWrapper browserApplication)
-    {
-        browserApplications.put(browserApplication.getId(), browserApplication);
-        entities.put(browserApplication.getId(), browserApplication);
-    }
-
-    /**
-     * Returns the browser application for the given id.
-     * @param entityId The id of the browser application
-     * @return The browser application for the given id
-     */
-    public EntityWrapper getBrowserApplication(long entityId)
-    {
-        return browserApplications.get(entityId);
-    }
-
-    /**
-     * Returns the mobile applications for the account.
-     * @return The mobile applications for the account
-     */
-    public Map<Long,EntityWrapper> getMobileApplications()
+    public MobileApplicationCache mobileApplications()
     {
         return mobileApplications;
     }
 
     /**
-     * Adds the mobile application to the mobile applications for the account.
-     * @param mobileApplication The mobile application to add
+     * Returns the server cache.
+     * @return The server cache
      */
-    public void addMobileApplication(EntityWrapper mobileApplication)
-    {
-        mobileApplications.put(mobileApplication.getId(), mobileApplication);
-        entities.put(mobileApplication.getId(), mobileApplication);
-    }
-
-    /**
-     * Returns the mobile application for the given id.
-     * @param entityId The id of the mobile application
-     * @return The mobile application for the given id
-     */
-    public EntityWrapper getMobileApplication(long entityId)
-    {
-        return mobileApplications.get(entityId);
-    }
-
-    /**
-     * Returns the plugins for the account.
-     * @return The plugins for the account
-     */
-    public Map<Long,EntityWrapper> getPlugins()
-    {
-        return plugins;
-    }
-
-    /**
-     * Adds the plugin to the plugins for the account.
-     * @param plugin The plugin to add
-     */
-    public void addPlugin(EntityWrapper plugin)
-    {
-        plugins.put(plugin.getId(), plugin);
-        entities.put(plugin.getId(), plugin);
-    }
-
-    /**
-     * Returns the plugin for the given id.
-     * @param entityId The id of the plugin
-     * @return The plugin for the given id
-     */
-    public EntityWrapper getPlugin(long entityId)
-    {
-        return plugins.get(entityId);
-    }
-
-    /**
-     * Returns the monitors for the account.
-     * @return The monitors for the account
-     */
-    public Map<String,MonitorWrapper> getMonitors()
-    {
-        return monitors;
-    }
-
-    /**
-     * Adds the monitor to the monitors for the account.
-     * @param monitor The monitor to add
-     */
-    public void addMonitor(MonitorWrapper monitor)
-    {
-        monitors.put(monitor.getId(), monitor);
-    }
-
-    /**
-     * Returns the monitor for the given id.
-     * @param monitorId The id of the monitor
-     * @return The monitor for the given id
-     */
-    public MonitorWrapper getMonitor(String monitorId)
-    {
-        return monitors.get(monitorId);
-    }
-
-    /**
-     * Returns the servers for the account.
-     * @return The servers for the account
-     */
-    public Map<Long,EntityWrapper> getServers()
+    public ServerCache servers()
     {
         return servers;
     }
 
     /**
-     * Adds the server to the servers for the account.
-     * @param server The server to add
+     * Returns the plugin cache.
+     * @return The plugin cache
      */
-    public void addServer(EntityWrapper server)
+    public PluginCache plugins()
     {
-        servers.put(server.getId(), server);
-        entities.put(server.getId(), server);
+        return plugins;
     }
 
     /**
-     * Returns the server for the given id.
-     * @param entityId The id of the server
-     * @return The server for the given id
+     * Returns the monitor cache.
+     * @return The monitor cache
      */
-    public EntityWrapper getServer(long entityId)
+    public MonitorCache monitors()
     {
-        return servers.get(entityId);
+        return monitors;
     }
 
     /**
-     * Returns the entities for the account.
-     * @return The entities for the account
+     * Returns the dashboard cache.
+     * @return The dashboard cache
      */
-    public Map<Long,EntityWrapper> getEntities()
-    {
-        return entities;
-    }
-
-    /**
-     * Returns the entity for the given id.
-     * @param entityId The id of the entity
-     * @return The entity for the given id
-     */
-    public EntityWrapper getEntity(long entityId)
-    {
-        return entities.get(entityId);
-    }
-
-    /**
-     * Returns the dashboards for the account.
-     * @return The dashboards for the account
-     */
-    public Map<Long,DashboardWrapper> getDashboards()
+    public DashboardCache dashboards()
     {
         return dashboards;
     }
 
     /**
-     * Adds the dashboard to the dashboards for the account.
-     * @param dashboard The dashboard to add
+     * Returns the entity cache.
+     * @return The entity cache
      */
-    public void addDashboard(DashboardWrapper dashboard)
+    public EntityCache entities()
     {
-        dashboards.put(dashboard.getId(), dashboard);
-    }
-
-    /**
-     * Returns the dashboard for the given id.
-     * @param dashboardId The id of the dashboard
-     * @return The dashboard for the given id
-     */
-    public DashboardWrapper getDashboard(long dashboardId)
-    {
-        return dashboards.get(dashboardId);
-    }
-
-    /**
-     * Clear the alerts configuration.
-     */
-    public void clearAlerts()
-    {
-        channels.clear();
-        policies.clear();
-    }
-
-    /**
-     * Clear the applications.
-     */
-    public void clearApplications()
-    {
-        applications.clear();
-        browserApplications.clear();
-        mobileApplications.clear();
-    }
-
-    /**
-     * Clear the plugins.
-     */
-    public void clearPlugins()
-    {
-        plugins.clear();
-    }
-
-    /**
-     * Clear the monitors.
-     */
-    public void clearMonitors()
-    {
-        monitors.clear();
-    }
-
-    /**
-     * Clear the servers.
-     */
-    public void clearServers()
-    {
-        servers.clear();
-    }
-
-    /**
-     * Clear the entities.
-     */
-    public void clearEntities()
-    {
-        entities.clear();
-    }
-
-    /**
-     * Clear the dashboards.
-     */
-    public void clearDashboards()
-    {
-        dashboards.clear();
+        return entities;
     }
 
     /**
@@ -597,8 +356,8 @@ public class NewRelicCache extends ProviderCache
     {
         return "NewRelicCache ["+super.toString()
             +", apiKey="+getMaskedApiKey(6)
-            +", channels="+channels.size()
-            +", policies="+policies.size()
+            +", channels="+alertChannels.size()
+            +", policies="+alertPolicies.size()
             +", applications="+applications.size()
             +", browserApplications="+browserApplications.size()
             +", mobileApplications="+mobileApplications.size()
