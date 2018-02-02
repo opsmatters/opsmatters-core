@@ -36,6 +36,7 @@ import org.docx4j.openpackaging.parts.relationships.RelationshipsPart;
 import org.docx4j.openpackaging.parts.PartName;
 import org.docx4j.openpackaging.io3.Save;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.xlsx4j.jaxb.Context;
 import org.xlsx4j.sml.Sheets;
 import org.xlsx4j.sml.Sheet;
@@ -533,19 +534,32 @@ public class XlsxWorkbook extends Workbook
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
      * @return The worksheet created
-     * @throws Docx4JException if the sheet cannot be created
-     * @throws javax.xml.bind.JAXBException if JAXB has not been initialised
+     * @throws IOException if the sheet cannot be created
      */
     @Override
     public XlsxWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws Docx4JException, javax.xml.bind.JAXBException
+        throws IOException
     {
         if(pkg == null)
             return null;
 
-        int sheetId = worksheets.size()+1;
-        PartName sheetPart = new PartName("/xl/worksheets/sheet"+sheetId+".xml");
-        WorksheetPart wsp = pkg.createWorksheetPart(sheetPart, sheetName, (long)sheetId);
+        WorksheetPart wsp = null;
+
+        try
+        {
+            int sheetId = worksheets.size()+1;
+            PartName sheetPart = new PartName("/xl/worksheets/sheet"+sheetId+".xml");
+            wsp = pkg.createWorksheetPart(sheetPart, sheetName, (long)sheetId);
+        }
+        catch(InvalidFormatException e)
+        {
+            throw new IOException(e);
+        }
+        catch(javax.xml.bind.JAXBException e)
+        {
+            throw new IOException(e);
+        }
+
         org.xlsx4j.sml.Worksheet sheet = (org.xlsx4j.sml.Worksheet)wsp.getJaxbElement();
         SheetData sheetData = sheet.getSheetData();
 
@@ -620,11 +634,9 @@ public class XlsxWorkbook extends Workbook
      * @param columns The column definitions for the worksheet
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
-     * @throws Exception if the data cannot be appended
      */
     @Override
     public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws Exception
     {
         XlsxWorksheet sheet = getSheet(sheetName);
         if(sheet != null)
@@ -1139,21 +1151,28 @@ public class XlsxWorkbook extends Workbook
 
     /**
      * Write the workbook.
-     * @throws Docx4JException if the workbook cannot be written
+     * @throws IOException if the workbook cannot be written
      */
     @Override
-    public void write() throws Docx4JException
+    public void write() throws IOException
     {
         if(pkg != null)
         {
-            if(outputStream != null)
+            try
             {
-                Save saver = new Save(pkg);
-                saver.save(outputStream);
+                if(outputStream != null)
+                {
+                    Save saver = new Save(pkg);
+                    saver.save(outputStream);
+                }
+                else if(file != null)
+                {
+                    pkg.save(file);
+                }
             }
-            else if(file != null)
+            catch(Docx4JException e)
             {
-                pkg.save(file);
+                throw new IOException(e);
             }
         }
     }

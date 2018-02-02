@@ -132,10 +132,8 @@ public class StringUtilities
      * @param str The string against which the expression is to be matched
      * @param expr The regular expression to match with the input string
      * @return <CODE>true</CODE> if the given string matches the given regular expression
-     * @throws Exception if the given expression is not valid
      */
     public static boolean getMatchResult(String str, String expr)
-        throws Exception
     {
         Pattern pattern = Pattern.compile(expr, Pattern.DOTALL);
         return pattern.matcher(str).matches();

@@ -156,26 +156,26 @@ public abstract class Workbook
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
      * @return The worksheet created
-     * @throws Exception if the sheet cannot be created
+     * @throws IOException if the sheet cannot be created
      */
     public abstract Worksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws Exception;
+        throws IOException;
 
     /**
      * Adds the given lines of data to an existing sheet in the workbook.
      * @param columns The column definitions for the worksheet
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
-     * @throws Exception if the data cannot be appended
+     * @throws IOException if the data cannot be appended
      */
     public abstract void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws Exception;
+        throws IOException;
 
     /**
      * Write the workbook.
-     * @throws Exception if the workbook cannot be written
+     * @throws IOException if the workbook cannot be written
      */
-    public abstract void write() throws Exception;
+    public abstract void write() throws IOException;
 
     /**
      * Close the workbook.

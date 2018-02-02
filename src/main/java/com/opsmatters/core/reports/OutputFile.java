@@ -181,9 +181,9 @@ public class OutputFile
      * @param sheetName The name of the worksheet
      * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
      * @return The formatted output file contents
-     * @throws Exception if the file cannot be opened
+     * @throws IOException if the file cannot be opened
      */
-    public byte[] getContents(List<String[]> lines, String sheetName, boolean append) throws Exception
+    public byte[] getContents(List<String[]> lines, String sheetName, boolean append) throws IOException
     {
         return getContents(null, lines, sheetName, append);
     }
@@ -195,10 +195,10 @@ public class OutputFile
      * @param sheetName The name of the worksheet
      * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
      * @return The formatted output file contents
-     * @throws Exception if the file cannot be opened
+     * @throws IOException if the file cannot be opened
      */
     public byte[] getContents(ReportColumn[] columns, 
-        List<String[]> lines, String sheetName, boolean append) throws Exception
+        List<String[]> lines, String sheetName, boolean append) throws IOException
     {
         byte[] ret;
 
@@ -221,7 +221,7 @@ public class OutputFile
      * @param sheetName The name of the worksheet
      * @return The byte array representing the CSV output file data
      */
-    private byte[] getCSVOutput(List<String[]> lines, String sheetName) throws Exception
+    private byte[] getCSVOutput(List<String[]> lines, String sheetName)
     {
         StringWriter writer = new StringWriter();
         csv = new CSVWriter(writer, getDelimiterChar());
@@ -243,7 +243,7 @@ public class OutputFile
      * @return The XLS or XLSX output file data
      */
     private byte[] getExcelOutput(ReportColumn[] columns, 
-        List<String[]> lines, String sheetName, boolean append) throws Exception
+        List<String[]> lines, String sheetName, boolean append) throws IOException
     {
         // Create the workbook
         baos = new ByteArrayOutputStream(1024);

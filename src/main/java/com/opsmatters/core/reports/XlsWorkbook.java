@@ -233,15 +233,23 @@ public class XlsWorkbook extends Workbook
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
      * @return The worksheet created
-     * @throws WriteException if the sheet cannot be created
+     * @throws IOException if the sheet cannot be created
      */
     @Override
     public XlsWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws WriteException
+        throws IOException
     {
         // Create the worksheet and add the cells
         WritableSheet sheet = writableWorkbook.createSheet(sheetName, 9999); // Append sheet
-        appendRows(sheet, columns, lines, sheetName);
+
+        try
+        {
+            appendRows(sheet, columns, lines, sheetName);
+        }
+        catch(WriteException e)
+        {
+            throw new IOException(e);
+        }
 
         // Set the column to autosize
         int numColumns = sheet.getColumns();
@@ -266,15 +274,22 @@ public class XlsWorkbook extends Workbook
      * @param columns The column definitions for the worksheet
      * @param lines The list of lines to be added to the worksheet
      * @param sheetName The name of the worksheet to be added
-     * @throws Exception if the data cannot be appended
+     * @throws IOException if the data cannot be appended
      */
     @Override
     public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
-        throws Exception
+        throws IOException
     {
-        XlsWorksheet sheet = getSheet(sheetName);
-        if(sheet != null)
-            appendRows((WritableSheet)sheet.getSheet(), columns, lines, sheetName);
+        try
+        {
+            XlsWorksheet sheet = getSheet(sheetName);
+            if(sheet != null)
+                appendRows((WritableSheet)sheet.getSheet(), columns, lines, sheetName);
+        }
+        catch(WriteException e)
+        {
+            throw new IOException(e);
+        }
     }
 
     /**

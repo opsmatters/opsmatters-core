@@ -168,7 +168,7 @@ public class ProviderTest
                 outstream.write(bytes);
             }
         }
-        catch(Exception e)
+        catch(IOException e)
         {
             logger.severe(StringUtilities.serialize(e));
         }
