@@ -231,7 +231,7 @@ built.on=${TODAY}
         <configuration> 
           <outputDirectory>${basedir}/apidocs</outputDirectory> 
           <show>private</show>
-          <windowtitle>New Relic API Documentation</windowtitle>
+          <windowtitle>OpsMatters Core Documentation</windowtitle>
           <breakiterator>true</breakiterator>
           <maxmemory>512m</maxmemory>
           <header><![CDATA[<h1>opsmatters core v${project.version}</h1>]]></header> 
