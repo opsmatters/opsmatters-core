@@ -371,10 +371,17 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
             {
                 cache.applications().addLabel(label);
 
-                // Also check to see if this label is associated with any monitors
-                Collection<Monitor> monitors = syntheticsApiClient.monitors().list(label);
-                for(Monitor monitor : monitors)
-                    cache.monitors().labels(monitor.getId()).add(label);
+                try
+                {
+                    // Also check to see if this label is associated with any monitors
+                    Collection<Monitor> monitors = syntheticsApiClient.monitors().list(label);
+                    for(Monitor monitor : monitors)
+                       cache.monitors().labels(monitor.getId()).add(label);
+                }
+                catch(NullPointerException e)
+                {
+                    logger.severe("Unable to get monitor labels: "+e.getClass().getName()+": "+e.getMessage());
+                }
             }
 
             cache.setUpdatedAt();
