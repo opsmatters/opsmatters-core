@@ -45,7 +45,7 @@ public class InputFileReader
     private boolean trim = true;
     private boolean removeQuotes = false;
     private InputStream stream;
-    private String[] columns;
+    private String[] headers;
     private List<String[]> rows = new ArrayList<String[]>();
 
     /**
@@ -187,17 +187,17 @@ public class InputFileReader
      */
     public int numColumns()
     {
-        return columns != null ? columns.length : -1;
+        return headers != null ? headers.length : -1;
     }
 
     /**
-     * Returns the name of the column in the input file at the given index.
+     * Returns the column header in the input file at the given index.
      * @param col The column in the input file
-     * @return The name of the column in the input file at the given index
+     * @return The column header in the input file at the given index
      */
-    public String getColumn(int col)
+    public String getHeader(int col)
     {
-        return columns != null ? columns[col] : null;
+        return headers != null ? headers[col] : null;
     }
 
     /**
@@ -290,7 +290,7 @@ public class InputFileReader
             throw new RuntimeException("input file does not contain any data");
 
         // Parse the file headers and rows into several arrays
-        columns = new String[columnCount]; // the column names
+        headers = new String[columnCount];
         int count = 0;
         for(String[] line : lines)
         {
@@ -317,11 +317,11 @@ public class InputFileReader
                 {
                     try
                     {
-                        columns[column] = line[column].trim();
+                        headers[column] = line[column].trim();
                     }
                     catch(NoSuchElementException e)
                     {
-                        columns[column] = "";
+                        headers[column] = "";
                     }
                 }
                 else // The subsequent rows give the actual data
@@ -347,8 +347,7 @@ public class InputFileReader
 
                         // Put the processed token in the array
                         row[column] = token;
-                        logger.fine("InputFileReader.parse: row["
-                            +count+","+columns[column]+"]="+token);
+                        logger.fine("InputFileReader.parse: row["+count+","+headers[column]+"]="+token);
                     }
                     catch(NoSuchElementException e)
                     {
