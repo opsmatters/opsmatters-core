@@ -191,6 +191,15 @@ public class InputFileReader
     }
 
     /**
+     * Returns the column headers in the input file.
+     * @return The column headers in the input file
+     */
+    public String[] getHeaders()
+    {
+        return headers;
+    }
+
+    /**
      * Returns the column header in the input file at the given index.
      * @param col The column in the input file
      * @return The column header in the input file at the given index
@@ -198,6 +207,25 @@ public class InputFileReader
     public String getHeader(int col)
     {
         return headers != null ? headers[col] : null;
+    }
+
+    /**
+     * Returns the lines in the input file.
+     * @return The lines in the input file
+     */
+    public List<String[]> getRows()
+    {
+        return rows;
+    }
+
+    /**
+     * Returns the line in the input file for the given row.
+     * @param row The row in the input file
+     * @return The line in the input file for the given row
+     */
+    public String[] getRow(int row)
+    {
+        return rows.get(row);
     }
 
     /**
@@ -289,8 +317,7 @@ public class InputFileReader
         if(lineCount <= 0 || columnCount == 0)
             throw new RuntimeException("input file does not contain any data");
 
-        // Parse the file headers and rows into several arrays
-        headers = new String[columnCount];
+        // Parse the file headers and rows
         int count = 0;
         for(String[] line : lines)
         {
@@ -312,16 +339,16 @@ public class InputFileReader
                         throw new RuntimeException("Row "+count+" has more columns than the header row");
                 }
 
-                // The first row gives the column names (and property names)
+                // The first row gives the column headers
                 if(count == 0)
                 {
                     try
                     {
-                        headers[column] = line[column].trim();
+                        row[column] = line[column].trim();
                     }
                     catch(NoSuchElementException e)
                     {
-                        headers[column] = "";
+                        row[column] = "";
                     }
                 }
                 else // The subsequent rows give the actual data
@@ -356,8 +383,11 @@ public class InputFileReader
                 }
             }
 
+            if(count == 0)
+                headers = row;
+            else
+                rows.add(row);
             ++count;
-            rows.add(row);
         }
 
         return rows;
