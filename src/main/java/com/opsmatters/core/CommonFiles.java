@@ -227,4 +227,27 @@ public class CommonFiles
      * The extension used for xz files.
      */
     public final static String XZ_EXT               = "xz";
+
+    /**
+     * Returns <CODE>true</CODE> if the given filename is an XLS or XLSX file.
+     * @param filename The filename to be checked
+     * @return <CODE>true</CODE> if the given filename is an XLS or XLSX file
+     */
+    public static boolean isExcelFile(String filename)
+    {
+        String lowerFilename = filename.toLowerCase();
+        return lowerFilename.endsWith("."+CommonFiles.XLS_EXT)
+           || lowerFilename.endsWith("."+CommonFiles.XLSX_EXT);
+    }
+
+    /**
+     * Returns <CODE>true</CODE> if the given filename is a CSV file.
+     * @param filename The filename to be checked
+     * @return <CODE>true</CODE> if the given filename is a CSV file
+     */
+    public static boolean isCsvFile(String filename)
+    {
+        String lowerFilename = filename.toLowerCase();
+        return lowerFilename.endsWith("."+CommonFiles.CSV_EXT);
+    }
 }
