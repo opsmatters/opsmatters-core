@@ -16,9 +16,15 @@
 
 package com.opsmatters.core.reports;
 
-import java.io.*;
-import java.util.*;
-import com.opencsv.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.util.List;
+import com.opencsv.CSVWriter;
 import java.util.logging.Logger;
 import com.opsmatters.core.CommonFiles;
 import com.opsmatters.core.type.FileDelimiterType;
@@ -29,19 +35,22 @@ import com.opsmatters.core.util.StringUtilities;
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class OutputFile
+public class OutputFileWriter
 {
-    private static final Logger logger = Logger.getLogger(OutputFile.class.getName());
+    private static final Logger logger = Logger.getLogger(OutputFileWriter.class.getName());
 
-    private String filename = "";
+    private String name = "";
     private short format = CSV_FORMAT;
+    private String delimiter = FileDelimiterType.COMMA;
+    private String worksheet = "";
+    private boolean append = true;
+    private boolean headers = true;
+    private boolean quotes = true;
+    private OutputStream stream;
     private CSVWriter csv = null;
     private Workbook existing = null;
     private Workbook workbook = null;
     private ByteArrayOutputStream baos;
-    private String delimiter = FileDelimiterType.COMMA;
-    private boolean headers = true;
-    private boolean quotes = true;
 
     /**
 
@@ -60,31 +69,29 @@ public class OutputFile
     public static final short XLSX_FORMAT = 2;
 
     /**
-     * Constructor that takes a filename.
-     * @param filename The filename of the output file
+     * Default constructor.
      */
-    public OutputFile(String filename)
+    public OutputFileWriter()
     {
-        this.filename = filename;
-        this.format = getFileType(filename);
     }
 
     /**
-     * Constructor that takes a format.
-     * @param format The format of the output file
+     * Sets the name of the output file.
+     * @param name The name of the output file
      */
-    public OutputFile(short format)
+    public void setName(String name)
     {
-        this.format = format;
+        this.name = name;
+        this.format = getFileType(name);
     }
 
     /**
      * Returns the name of the file.
      * @return The name of the file
      */
-    public String getFilename()
+    public String getName()
     {
-        return filename;
+        return name;
     }
 
     /**
@@ -93,7 +100,7 @@ public class OutputFile
      */
     public void setDelimiter(String delimiter)
     {
-        this.delimiter = delimiter != null ? new String(delimiter) : "";
+        this.delimiter = delimiter;
     }
 
     /**
@@ -119,6 +126,24 @@ public class OutputFile
                 ret = str.charAt(0);
         }
         return ret;
+    }
+
+    /**
+     * Returns the worksheet to be opened in the output file (XLS, XLSX only).
+     * @return The worksheet to be opened in the output file (XLS, XLSX only)
+     */
+    public String getWorksheet()
+    {
+        return worksheet;
+    }
+
+    /**
+     * Sets the worksheet to be opened in the output file (XLS, XLSX only).
+     * @param worksheet The worksheet to be opened in the output file (XLS, XLSX only)
+     */
+    public void setWorksheet(String worksheet)
+    {
+        this.worksheet = worksheet;
     }
 
     /**
@@ -158,6 +183,42 @@ public class OutputFile
     }
 
     /**
+     * Set to <CODE>true</CODE> if the lines should be appended to the output file.
+     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+     */
+    public void setAppend(boolean append)
+    {
+        this.append = append;
+    }
+
+    /**
+     * Returns <CODE>true</CODE> if the lines should be appended to the output file.
+     * @return <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+     */
+    public boolean append()
+    {
+        return append;
+    }
+
+    /**
+     * Sets the output stream for the output file.
+     * @param stream The output stream for the output file
+     */
+    public void setOutputStream(OutputStream stream)
+    {
+        this.stream = stream;
+    }
+
+    /**
+     * Returns the output stream for the output file.
+     * @return The output stream for the output file
+     */
+    public OutputStream getOutputStream()
+    {
+        return stream;
+    }
+
+    /**
      * Returns the file type based on the file name.
      * @param filename The filename to check
      * @return The file type based on the file name
@@ -178,38 +239,34 @@ public class OutputFile
     /**
      * Returns the formatted output file contents.
      * @param lines The lines to add to the output file
-     * @param sheetName The name of the worksheet
-     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
      * @return The formatted output file contents
      * @throws IOException if the file cannot be opened
      */
-    public byte[] getContents(List<String[]> lines, String sheetName, boolean append) throws IOException
+    public byte[] getContents(List<String[]> lines) throws IOException
     {
-        return getContents(null, lines, sheetName, append);
+        return getContents(null, lines);
     }
 
     /**
      * Returns the formatted output file contents.
      * @param columns The column definitions for the output file
      * @param lines The lines to add to the output file
-     * @param sheetName The name of the worksheet
-     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
      * @return The formatted output file contents
      * @throws IOException if the file cannot be opened
      */
-    public byte[] getContents(ReportColumn[] columns, 
-        List<String[]> lines, String sheetName, boolean append) throws IOException
+    public byte[] getContents(ReportColumn[] columns, List<String[]> lines)
+        throws IOException
     {
         byte[] ret;
 
         // Excel spreadsheet
         if(format == XLS_FORMAT || format == XLSX_FORMAT)
         {
-            ret = getExcelOutput(columns, lines, sheetName, append);
+            ret = getExcelOutput(columns, lines);
         }
         else // Assume it's a CSV file
         {
-            ret = getCSVOutput(lines, sheetName);
+            ret = getCSVOutput(lines);
         }
 
         return ret;
@@ -218,10 +275,9 @@ public class OutputFile
     /**
      * Returns the CSV output file data.
      * @param lines The lines to add to the output file
-     * @param sheetName The name of the worksheet
      * @return The byte array representing the CSV output file data
      */
-    private byte[] getCSVOutput(List<String[]> lines, String sheetName)
+    private byte[] getCSVOutput(List<String[]> lines)
     {
         StringWriter writer = new StringWriter();
         csv = new CSVWriter(writer, getDelimiterChar());
@@ -238,12 +294,9 @@ public class OutputFile
      * Returns the XLS or XLSX output file data.
      * @param columns The column definitions for the output file
      * @param lines The lines to add to the output file
-     * @param sheetName The name of the worksheet
-     * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
      * @return The XLS or XLSX output file data
      */
-    private byte[] getExcelOutput(ReportColumn[] columns, 
-        List<String[]> lines, String sheetName, boolean append) throws IOException
+    private byte[] getExcelOutput(ReportColumn[] columns, List<String[]> lines) throws IOException
     {
         // Create the workbook
         baos = new ByteArrayOutputStream(1024);
@@ -254,10 +307,10 @@ public class OutputFile
 
         workbook.setHeaders(hasHeaders());
 
-        if(append && workbook.getSheet(sheetName) != null)
-            workbook.appendToSheet(columns, lines, sheetName);
+        if(append && workbook.getSheet(worksheet) != null)
+            workbook.appendToSheet(columns, lines, worksheet);
         else
-            workbook.createSheet(columns, lines, sheetName);
+            workbook.createSheet(columns, lines, worksheet);
 
         // Write out the workbook to the stream
         workbook.write();
@@ -265,6 +318,32 @@ public class OutputFile
 
         // The contents returned is the byte array
         return baos.toByteArray();
+    }
+
+    /**
+     * Write the contents of the output file to the output stream.
+     * @param lines The lines to add to the output file
+     * @throws IOException if there was an error writing to the stream
+     */
+    public void write(List<String[]> lines) throws IOException
+    {
+        write(null, lines);
+    }
+
+    /**
+     * Write the contents of the output file to the output stream.
+     * @param columns The column definitions for the output file
+     * @param lines The lines to add to the output file
+     * @throws IOException if there was an error writing to the stream
+     */
+    public void write(ReportColumn[] columns, List<String[]> lines) throws IOException
+    {
+        Object contents = getContents(columns, lines);
+        if(stream != null && contents instanceof byte[])
+        {
+            byte[] bytes = (byte[])contents;
+            stream.write(bytes);
+        }
     }
 
     /**
@@ -388,5 +467,108 @@ public class OutputFile
         }
 
         return ret;
+    }
+
+    /**
+     * Returns a builder for the writer.
+     * @return The builder instance.
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    /**
+     * Builder to make writer construction easier.
+     */
+    public static class Builder
+    {
+        private OutputFileWriter writer = new OutputFileWriter();
+
+        /**
+         * Sets the name of the output file.
+         * @param name The name of the output file
+         * @return This object
+         */
+        public Builder name(String name)
+        {
+            writer.setName(name);
+            return this;
+        }
+
+        /**
+         * Sets the worksheet to be opened in the output file (XLS, XLSX only).
+         * @param worksheet The worksheet to be opened in the output file (XLS, XLSX only)
+         * @return This object
+         */
+        public Builder worksheet(String worksheet)
+        {
+            writer.setWorksheet(worksheet);
+            return this;
+        }
+
+        /**
+         * Sets the delimiter used in the output file (CSV only).
+         * @param delimiter The delimiter used in the output file (CSV only)
+         * @return This object
+         */
+        public Builder delimiter(String delimiter)
+        {
+            writer.setDelimiter(delimiter);
+            return this;
+        }
+
+        /**
+         * Set to <CODE>true</CODE> if the output file has quotes around each field.
+         * @param quotes <CODE>true</CODE> if the output file has quotes around each field
+         * @return This object
+         */
+        public Builder quotes(boolean quotes)
+        {
+            writer.setQuotes(quotes);
+            return this;
+        }
+
+        /**
+         * Set to <CODE>true</CODE> if the output file has a header row.
+         * @param headers <CODE>true</CODE> if the output file has a header row
+         * @return This object
+         */
+        public Builder headers(boolean headers)
+        {
+            writer.setHeaders(headers);
+            return this;
+        }
+
+        /**
+         * Set to <CODE>true</CODE> if the lines should be appended to the output file.
+         * @param append <CODE>true</CODE> if the lines should be appended instead of replacing the data in the sheet
+         * @return This object
+         */
+        public Builder append(boolean append)
+        {
+            writer.setAppend(append);
+            return this;
+        }
+
+        /**
+         * Sets the output stream for the output file.
+         * @param stream The output stream for the output file
+         * @return This object
+         */
+        public Builder withOutputStream(OutputStream stream)
+        {
+            writer.setOutputStream(stream);
+            return this;
+        }
+
+        /**
+         * Returns the configured writer instance
+         * @return The writer instance
+         */
+        public OutputFileWriter build()
+        {
+            return writer;
+        }
     }
 }

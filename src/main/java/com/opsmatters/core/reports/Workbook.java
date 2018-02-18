@@ -93,11 +93,11 @@ public abstract class Workbook
         throws IOException
     {
         Workbook ret = null;
-        if(format == OutputFile.XLS_FORMAT)
+        if(format == OutputFileWriter.XLS_FORMAT)
         {
             ret = XlsWorkbook.createWorkbook(os, existing);
         }
-        else if(format == OutputFile.XLSX_FORMAT)
+        else if(format == OutputFileWriter.XLSX_FORMAT)
         {
             XlsxWorkbook.initJaxbContexts();
             ret = XlsxWorkbook.createWorkbook(os, existing);

@@ -495,8 +495,8 @@ public class InputFileReader
         }
 
         /**
-         * Returns the configured renderer instance
-         * @return The renderer instance
+         * Returns the configured reader instance
+         * @return The reader instance
          */
         public InputFileReader build()
         {

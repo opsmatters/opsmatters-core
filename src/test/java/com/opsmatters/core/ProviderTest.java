@@ -19,7 +19,6 @@ package com.opsmatters.core;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import com.opsmatters.core.provider.Provider;
 import com.opsmatters.core.provider.ProviderFactory;
 import com.opsmatters.core.provider.ProviderManager;
 import com.opsmatters.core.provider.NewRelicCache;
-import com.opsmatters.core.reports.OutputFile;
+import com.opsmatters.core.reports.OutputFileWriter;
 import com.opsmatters.core.util.StringUtilities;
 import com.opsmatters.newrelic.api.Constants;
 import com.opsmatters.newrelic.api.model.alerts.channels.AlertChannel;
@@ -154,19 +153,17 @@ public class ProviderTest
 
     public void createReport(String directory, String filename, String sheetName, List<String[]> lines)
     {
-        OutputFile output = new OutputFile(filename);
-        OutputStream outstream = null;
-
+        OutputStream os = null;
         try
         {
             // Write the contents of the stream
-            outstream = new FileOutputStream(new File(directory, output.getFilename()), false);
-            Object contents = output.getContents(null, lines, sheetName, true);
-            if(outstream != null && contents instanceof byte[])
-            {
-                byte[] bytes = (byte[])contents;
-                outstream.write(bytes);
-            }
+            os = new FileOutputStream(new File(directory, filename), false);
+            OutputFileWriter writer = OutputFileWriter.builder()
+                .name(filename)
+                .worksheet(sheetName)
+                .withOutputStream(os)
+                .build();
+            writer.write(lines);
         }
         catch(IOException e)
         {
@@ -177,10 +174,10 @@ public class ProviderTest
             try
             {
                 // Close the output stream
-                if(outstream != null)
+                if(os != null)
                 {
-                    outstream.flush();
-                    outstream.close();
+                    os.flush();
+                    os.close();
                 }
             }
             catch(IOException e)
