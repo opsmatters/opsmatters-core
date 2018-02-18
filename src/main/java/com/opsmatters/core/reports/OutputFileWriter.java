@@ -16,19 +16,15 @@
 
 package com.opsmatters.core.reports;
 
-import java.io.File;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.util.List;
 import com.opencsv.CSVWriter;
 import java.util.logging.Logger;
 import com.opsmatters.core.CommonFiles;
 import com.opsmatters.core.type.FileDelimiterType;
-import com.opsmatters.core.util.StringUtilities;
 
 /**
  * Object that encapsulates an output file in XLS, XLSX or CSV format.
@@ -386,8 +382,8 @@ public class OutputFileWriter
     }
 
     /**
-     * Sets an existing Workbook to which the sheet should be added.
-     * @param w The existing Workbook to which the sheet should be added
+     * Sets an existing workbook to which the sheet should be added.
+     * @param w The existing workbook to which the sheet should be added
      */
     public void setExistingWorkbook(Workbook w)
     {
@@ -395,8 +391,8 @@ public class OutputFileWriter
     }
 
     /**
-     * Returns an existing Workbook to which the sheet should be added.
-     * @return The existing Workbook to which the sheet should be added
+     * Returns an existing workbook to which the sheet should be added.
+     * @return The existing workbook to which the sheet should be added
      */
     public Workbook getExistingWorkbook()
     {
@@ -410,63 +406,6 @@ public class OutputFileWriter
     public Workbook getWorkbook()
     {
         return workbook;
-    }
-
-    /**
-     * Returns the workbook at the given file.
-     * @param file The file containing the name for the workbook
-     * @return The workbook created
-     */
-    public Workbook getWorkbook(File file)
-    {
-        Workbook ret = null;
-
-        String filename = file.getAbsolutePath().toLowerCase();
-        if(filename.endsWith("."+CommonFiles.XLS_EXT)
-            || filename.endsWith("."+CommonFiles.XLSX_EXT))
-        {
-            try
-            {
-                ret = Workbook.getWorkbook(file);
-            }
-            catch(FileNotFoundException e)
-            {
-                // Do nothing
-            }
-            catch(Exception e)
-            {
-                logger.severe(StringUtilities.serialize(e));
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-     * Returns the workbook at the given file.
-     * @param filename The name of the workbook
-     * @param stream The input stream for the workbook
-     * @return The workbook at the given file
-     */
-    public Workbook getWorkbook(String filename, InputStream stream)
-    {
-        Workbook ret = null;
-
-        filename = filename.toLowerCase();
-        if(filename.endsWith("."+CommonFiles.XLS_EXT)
-            || filename.endsWith("."+CommonFiles.XLSX_EXT))
-        {
-            try
-            {
-                ret = Workbook.getWorkbook(filename, stream);
-            }
-            catch(Exception e)
-            {
-                logger.severe(StringUtilities.serialize(e));
-            }
-        }
-
-        return ret;
     }
 
     /**
@@ -559,6 +498,17 @@ public class OutputFileWriter
         public Builder withOutputStream(OutputStream stream)
         {
             writer.setOutputStream(stream);
+            return this;
+        }
+
+        /**
+         * Sets an existing workbook to which the sheet should be added.
+         * @param workbook The existing workbook to which the sheet should be added
+         * @return This object
+         */
+        public Builder withWorkbook(Workbook workbook)
+        {
+            writer.setExistingWorkbook(workbook);
             return this;
         }
 
