@@ -24,7 +24,6 @@ import java.util.List;
 import com.opencsv.CSVWriter;
 import java.util.logging.Logger;
 import com.opsmatters.core.CommonFiles;
-import com.opsmatters.core.type.FileDelimiterType;
 
 /**
  * Object that encapsulates an output file in XLS, XLSX or CSV format.
@@ -36,8 +35,8 @@ public class OutputFileWriter
     private static final Logger logger = Logger.getLogger(OutputFileWriter.class.getName());
 
     private String name = "";
-    private short format = CSV_FORMAT;
-    private String delimiter = FileDelimiterType.COMMA;
+    private FileFormat format = FileFormat.CSV;
+    private FileDelimiter delimiter = FileDelimiter.COMMA;
     private String worksheet = "";
     private boolean append = true;
     private boolean headers = true;
@@ -47,22 +46,6 @@ public class OutputFileWriter
     private Workbook existing = null;
     private Workbook workbook = null;
     private ByteArrayOutputStream baos;
-
-    /**
-
-     * Indicates a CSV output file format.
-     */
-    public static final short CSV_FORMAT = 0;
-
-    /**
-     * Indicates an XLS output file format.
-     */
-    public static final short XLS_FORMAT = 1;
-
-    /**
-     * Indicates an XLSX output file format.
-     */
-    public static final short XLSX_FORMAT = 2;
 
     /**
      * Default constructor.
@@ -78,7 +61,7 @@ public class OutputFileWriter
     public void setName(String name)
     {
         this.name = name;
-        this.format = getFileType(name);
+        this.format = FileFormat.getFileFormat(name);
     }
 
     /**
@@ -94,7 +77,7 @@ public class OutputFileWriter
      * Sets the delimiter for the file (CSV only).
      * @param delimiter The delimiter for the file (CSV only)
      */
-    public void setDelimiter(String delimiter)
+    public void setDelimiter(FileDelimiter delimiter)
     {
         this.delimiter = delimiter;
     }
@@ -103,25 +86,9 @@ public class OutputFileWriter
      * Returns the delimiter for the file (CSV only).
      * @return The delimiter for the file (CSV only)
      */
-    public String getDelimiter()
+    public FileDelimiter getDelimiter()
     {
         return delimiter;
-    }
-
-    /**
-     * Returns the delimiter character for the file (CSV only).
-     * @return The delimiter character for the file (CSV only)
-     */
-    private char getDelimiterChar()
-    {
-        char ret = ',';
-        if(delimiter != null && delimiter.length() > 0)
-        {
-            String str = FileDelimiterType.getDelimiterByCode(delimiter);
-            if(str.length() > 0)
-                ret = str.charAt(0);
-        }
-        return ret;
     }
 
     /**
@@ -215,24 +182,6 @@ public class OutputFileWriter
     }
 
     /**
-     * Returns the file type based on the file name.
-     * @param filename The filename to check
-     * @return The file type based on the file name
-     */
-    public short getFileType(String filename)
-    {
-        short ret = 0;
-        filename = filename.toLowerCase();
-        if(filename.endsWith("."+CommonFiles.XLS_EXT))
-            ret = XLS_FORMAT;
-        else if(filename.endsWith("."+CommonFiles.XLSX_EXT))
-            ret = XLSX_FORMAT;
-        else if(filename.endsWith("."+CommonFiles.CSV_EXT))
-            ret = CSV_FORMAT;
-        return ret;
-    }
-
-    /**
      * Returns the formatted output file contents.
      * @param lines The lines to add to the output file
      * @return The formatted output file contents
@@ -256,7 +205,7 @@ public class OutputFileWriter
         byte[] ret;
 
         // Excel spreadsheet
-        if(format == XLS_FORMAT || format == XLSX_FORMAT)
+        if(format.isExcel())
         {
             ret = getExcelOutput(columns, lines);
         }
@@ -276,7 +225,7 @@ public class OutputFileWriter
     private byte[] getCSVOutput(List<String[]> lines)
     {
         StringWriter writer = new StringWriter();
-        csv = new CSVWriter(writer, getDelimiterChar());
+        csv = new CSVWriter(writer, delimiter.separator().charAt(0));
         for(int i = 0; i < lines.size(); i++)
         {
             csv.writeNext((String[])lines.get(i), quotes);
@@ -451,7 +400,7 @@ public class OutputFileWriter
          * @param delimiter The delimiter used in the output file (CSV only)
          * @return This object
          */
-        public Builder delimiter(String delimiter)
+        public Builder delimiter(FileDelimiter delimiter)
         {
             writer.setDelimiter(delimiter);
             return this;

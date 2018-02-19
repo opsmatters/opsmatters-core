@@ -88,16 +88,15 @@ public abstract class Workbook
      * @return The new workbook created
      * @throws IOException if the file cannot be written
      */
-    public static Workbook createWorkbook(short format,
-        OutputStream os, Workbook existing)
+    public static Workbook createWorkbook(FileFormat format, OutputStream os, Workbook existing)
         throws IOException
     {
         Workbook ret = null;
-        if(format == OutputFileWriter.XLS_FORMAT)
+        if(format == FileFormat.XLS)
         {
             ret = XlsWorkbook.createWorkbook(os, existing);
         }
-        else if(format == OutputFileWriter.XLSX_FORMAT)
+        else if(format == FileFormat.XLSX)
         {
             XlsxWorkbook.initJaxbContexts();
             ret = XlsxWorkbook.createWorkbook(os, existing);
@@ -112,7 +111,7 @@ public abstract class Workbook
      * @return The new workbook created
      * @throws IOException if the file cannot be written
      */
-    public static Workbook createWorkbook(short format, OutputStream os)
+    public static Workbook createWorkbook(FileFormat format, OutputStream os)
         throws IOException
     {
         return createWorkbook(format, os, null);

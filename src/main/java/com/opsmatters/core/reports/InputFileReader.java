@@ -40,7 +40,7 @@ public class InputFileReader
     private static final Logger logger = Logger.getLogger(InputFileReader.class.getName());
 
     private String name = "";
-    private String delimiter = ",";
+    private FileDelimiter delimiter = FileDelimiter.COMMA;
     private String worksheet = "";
     private boolean trim = true;
     private boolean removeQuotes = false;
@@ -86,7 +86,7 @@ public class InputFileReader
      * Sets the delimiter used in the input file (CSV only).
      * @param delimiter The delimiter used in the input file (CSV only)
      */
-    public void setDelimiter(String delimiter)
+    public void setDelimiter(FileDelimiter delimiter)
     {
         this.delimiter = delimiter;
     }
@@ -95,7 +95,7 @@ public class InputFileReader
      * Returns the delimiter used in the input file (CSV only).
      * @return The delimiter used in the input file (CSV only)
      */
-    public String getDelimiter()
+    public FileDelimiter getDelimiter()
     {
         return delimiter;
     }
@@ -298,7 +298,7 @@ public class InputFileReader
         else if(CommonFiles.isCsvFile(name))
         {
             Reader reader = new InputStreamReader(stream);
-            CSVReader csv = new CSVReader(reader, getDelimiter().charAt(0));
+            CSVReader csv = new CSVReader(reader, delimiter.separator().charAt(0));
             String [] line;
             while ((line = csv.readNext()) != null) 
             {
@@ -477,7 +477,7 @@ public class InputFileReader
          * @param delimiter The delimiter used in the input file (CSV only)
          * @return This object
          */
-        public Builder delimiter(String delimiter)
+        public Builder delimiter(FileDelimiter delimiter)
         {
             reader.setDelimiter(delimiter);
             return this;
