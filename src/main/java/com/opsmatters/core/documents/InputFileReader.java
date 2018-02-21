@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.opsmatters.core.reports;
+package com.opsmatters.core.documents;
 
 import java.io.InputStream;
 import java.io.Reader;

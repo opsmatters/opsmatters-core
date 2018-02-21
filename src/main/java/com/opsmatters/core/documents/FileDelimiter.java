@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.opsmatters.core.reports;
+package com.opsmatters.core.documents;
 
 /**
  * Represents the set of file delimiters.

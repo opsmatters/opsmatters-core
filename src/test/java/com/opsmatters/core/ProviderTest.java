@@ -30,7 +30,7 @@ import com.opsmatters.core.provider.Provider;
 import com.opsmatters.core.provider.ProviderFactory;
 import com.opsmatters.core.provider.ProviderManager;
 import com.opsmatters.core.provider.NewRelicCache;
-import com.opsmatters.core.reports.OutputFileWriter;
+import com.opsmatters.core.documents.OutputFileWriter;
 import com.opsmatters.core.util.StringUtilities;
 import com.opsmatters.newrelic.api.Constants;
 import com.opsmatters.newrelic.api.model.alerts.channels.AlertChannel;
