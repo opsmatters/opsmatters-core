@@ -285,14 +285,14 @@ public class InputFileReader
                 }
                 else
                 {
-                    throw new RuntimeException("Worksheet '"+worksheet+"' not found");
+                    throw new IllegalStateException("Worksheet '"+worksheet+"' not found");
                 }
 
                 workbook.close();
             }
             else
             {
-                throw new RuntimeException("Worksheet not specified");
+                throw new IllegalArgumentException("Worksheet not specified");
             }
         }
         else if(CommonFiles.isCsvFile(name))
@@ -315,7 +315,7 @@ public class InputFileReader
 
         // Error if the file is empty
         if(lineCount <= 0 || columnCount == 0)
-            throw new RuntimeException("input file does not contain any data");
+            throw new IllegalStateException("input file does not contain any data");
 
         // Parse the file headers and rows
         int count = 0;
@@ -336,7 +336,7 @@ public class InputFileReader
                     if(line.length > 0 && isCompleteLine(line))
                         break;
                     else
-                        throw new RuntimeException("Row "+count+" has more columns than the header row");
+                        throw new IllegalStateException("Row "+count+" has more columns than the header row");
                 }
 
                 // The first row gives the column headers
