@@ -157,7 +157,7 @@ public abstract class Workbook
      * @return The worksheet created
      * @throws IOException if the sheet cannot be created
      */
-    public abstract Worksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public abstract Worksheet createSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
         throws IOException;
 
     /**
@@ -167,7 +167,7 @@ public abstract class Workbook
      * @param sheetName The name of the worksheet to be added
      * @throws IOException if the data cannot be appended
      */
-    public abstract void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public abstract void appendToSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
         throws IOException;
 
     /**

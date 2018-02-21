@@ -30,13 +30,13 @@ import com.opsmatters.core.util.Formats;
 import com.opsmatters.core.util.FormatUtilities;
 
 /**
- * Class to encapsulate the text and attributes of a report column.
+ * Class to encapsulate the text and attributes of a file column.
  * 
  * @author Gerald Curley (opsmatters)
  */
-public class ReportColumn
+public class FileColumn
 {
-    private static final Logger logger = Logger.getLogger(ReportColumn.class.getName());
+    private static final Logger logger = Logger.getLogger(FileColumn.class.getName());
 
     /**
      * Indicates cell format not set.
@@ -172,7 +172,7 @@ public class ReportColumn
      * Constructor that takes a column name
      * @param s The name of the column
      */
-    public ReportColumn(String s)
+    public FileColumn(String s)
     {
         name = s.trim();
     }
@@ -616,7 +616,7 @@ public class ReportColumn
                 if(type == NO_TYPE)
                     type = STRING_TYPE;
                 if(!(o instanceof String))
-                    logger.severe("invalid report column type="+o.getClass().getName());
+                    logger.severe("invalid file column type="+o.getClass().getName());
                 if(inputType != NO_TYPE)
                     ret = convert(ret, dateFormat);
             }

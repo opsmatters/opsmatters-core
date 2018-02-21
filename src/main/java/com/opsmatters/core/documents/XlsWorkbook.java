@@ -236,7 +236,7 @@ public class XlsWorkbook extends Workbook
      * @throws IOException if the sheet cannot be created
      */
     @Override
-    public XlsWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public XlsWorksheet createSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
         throws IOException
     {
         // Create the worksheet and add the cells
@@ -277,7 +277,7 @@ public class XlsWorkbook extends Workbook
      * @throws IOException if the data cannot be appended
      */
     @Override
-    public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public void appendToSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
         throws IOException
     {
         try
@@ -300,7 +300,7 @@ public class XlsWorkbook extends Workbook
      * @param sheetName The name of the worksheet to be added
      * @return The array of column widths following the addition
      */
-    private void appendRows(WritableSheet sheet, ReportColumn[] columns, 
+    private void appendRows(WritableSheet sheet, FileColumn[] columns, 
         List<String[]> lines, String sheetName)
         throws WriteException
     {
@@ -366,7 +366,7 @@ public class XlsWorkbook extends Workbook
      * @param data The data in the cell
      * @return The formatted object for the given cell
      */
-    private WritableCell getCell(ReportColumn column, int col, int row, String data)
+    private WritableCell getCell(FileColumn column, int col, int row, String data)
     {
         WritableCell ret = null;
         short type = column.getType();
@@ -379,7 +379,7 @@ public class XlsWorkbook extends Workbook
             {
                 ret = new Label(col, row, data);
             }
-            else if(type == ReportColumn.STRING_TYPE || type == ReportColumn.NO_TYPE)
+            else if(type == FileColumn.STRING_TYPE || type == FileColumn.NO_TYPE)
             {
                 if(cellFormat == null)
                 {
@@ -389,7 +389,7 @@ public class XlsWorkbook extends Workbook
                 }
                 ret = new Label(col, row, data);
             }
-            else if(type == ReportColumn.NUMBER_TYPE)
+            else if(type == FileColumn.NUMBER_TYPE)
             {
                 double num = Double.parseDouble(data);
                 if(cellFormat == null && format.length() > 0)
@@ -400,12 +400,12 @@ public class XlsWorkbook extends Workbook
                 }
                 ret = new Number(col, row, num);
             }
-            else if(type == ReportColumn.BOOLEAN_TYPE)
+            else if(type == FileColumn.BOOLEAN_TYPE)
             {
                 boolean b = java.lang.Boolean.parseBoolean(data);
                 ret = new Boolean(col, row, b);
             }
-            else if(type == ReportColumn.DATETIME_TYPE)
+            else if(type == FileColumn.DATETIME_TYPE)
             {
                 long dt = Long.parseLong(data);
                 dt += getOffset(dt);
@@ -433,7 +433,7 @@ public class XlsWorkbook extends Workbook
      * @param cellFormat The dell to set the attributes on
      * @param column The column definition to take the attributes from
      */
-    public void setCellFormatAttributes(WritableCellFormat cellFormat, ReportColumn column)
+    public void setCellFormatAttributes(WritableCellFormat cellFormat, FileColumn column)
     {
         try
         {
@@ -441,15 +441,15 @@ public class XlsWorkbook extends Workbook
             {
                 Alignment a = Alignment.GENERAL;
                 short align = column.getAlign();
-                if(align == ReportColumn.ALIGN_CENTRE)
+                if(align == FileColumn.ALIGN_CENTRE)
                     a = Alignment.CENTRE;
-                else if(align == ReportColumn.ALIGN_LEFT)
+                else if(align == FileColumn.ALIGN_LEFT)
                     a = Alignment.LEFT;
-                else if(align == ReportColumn.ALIGN_RIGHT)
+                else if(align == FileColumn.ALIGN_RIGHT)
                     a = Alignment.RIGHT;
-                else if(align == ReportColumn.ALIGN_JUSTIFY)
+                else if(align == FileColumn.ALIGN_JUSTIFY)
                     a = Alignment.JUSTIFY;
-                else if(align == ReportColumn.ALIGN_FILL)
+                else if(align == FileColumn.ALIGN_FILL)
                     a = Alignment.FILL;
                 cellFormat.setAlignment(a);
                 cellFormat.setWrap(column.getWrap());

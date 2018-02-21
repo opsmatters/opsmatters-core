@@ -537,7 +537,7 @@ public class XlsxWorkbook extends Workbook
      * @throws IOException if the sheet cannot be created
      */
     @Override
-    public XlsxWorksheet createSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public XlsxWorksheet createSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
         throws IOException
     {
         if(pkg == null)
@@ -636,7 +636,7 @@ public class XlsxWorkbook extends Workbook
      * @param sheetName The name of the worksheet to be added
      */
     @Override
-    public void appendToSheet(ReportColumn[] columns, List<String[]> lines, String sheetName)
+    public void appendToSheet(FileColumn[] columns, List<String[]> lines, String sheetName)
     {
         XlsxWorksheet sheet = getSheet(sheetName);
         if(sheet != null)
@@ -651,7 +651,7 @@ public class XlsxWorkbook extends Workbook
      * @param sheetName The name of the worksheet to be added
      * @return The array of column widths following the addition
      */
-    private int[] appendRows(SheetData sheetData, ReportColumn[] columns, 
+    private int[] appendRows(SheetData sheetData, FileColumn[] columns, 
         List<String[]> lines, String sheetName)
     {
         int[] colWidths = null;
@@ -694,14 +694,14 @@ public class XlsxWorkbook extends Workbook
                 }
 
                 // Get a cell with the correct formatting
-                short type = ReportColumn.STRING_TYPE;
-                short align = ReportColumn.ALIGN_GENERAL;
+                short type = FileColumn.STRING_TYPE;
+                short align = FileColumn.ALIGN_GENERAL;
                 boolean wrap = false;
                 long numFmtId = 0L;
                 String format = null;
                 if(columns != null && j < columns.length)
                 {
-                    ReportColumn column = columns[j];
+                    FileColumn column = columns[j];
                     setCellAttributes(cell, column, j, i+size, data, sheetName);
                     type = column.getType();
                     align = column.getAlign();
@@ -727,7 +727,7 @@ public class XlsxWorkbook extends Workbook
                     if(t == STCellType.S)
                     {
                         numFmtId = 49L;
-                        if(i > 0 && type == ReportColumn.DATETIME_TYPE)
+                        if(i > 0 && type == FileColumn.DATETIME_TYPE)
                         { 
                             if(format != null && format.length() > 0)
                             {
@@ -907,23 +907,23 @@ public class XlsxWorkbook extends Workbook
             ret.setFontId(fontId);
         }
 
-        if(align != ReportColumn.ALIGN_GENERAL || wrap)
+        if(align != FileColumn.ALIGN_GENERAL || wrap)
         {
             ret.setApplyAlignment(true);
             CTCellAlignment ca = new CTCellAlignment();
 
-            if(align != ReportColumn.ALIGN_GENERAL)
+            if(align != FileColumn.ALIGN_GENERAL)
             {
                 STHorizontalAlignment a = STHorizontalAlignment.GENERAL;
-                if(align == ReportColumn.ALIGN_CENTRE)
+                if(align == FileColumn.ALIGN_CENTRE)
                     a = STHorizontalAlignment.CENTER;
-                else if(align == ReportColumn.ALIGN_LEFT)
+                else if(align == FileColumn.ALIGN_LEFT)
                     a = STHorizontalAlignment.LEFT;
-                else if(align == ReportColumn.ALIGN_RIGHT)
+                else if(align == FileColumn.ALIGN_RIGHT)
                     a = STHorizontalAlignment.RIGHT;
-                else if(align == ReportColumn.ALIGN_JUSTIFY)
+                else if(align == FileColumn.ALIGN_JUSTIFY)
                     a = STHorizontalAlignment.JUSTIFY;
-                else if(align == ReportColumn.ALIGN_FILL)
+                else if(align == FileColumn.ALIGN_FILL)
                     a = STHorizontalAlignment.FILL;
                 ca.setHorizontal(a);
             }
@@ -947,7 +947,7 @@ public class XlsxWorkbook extends Workbook
      * @param sheetName The name of the worksheet containing the cell
      * @return The formatted object for the given cell
      */
-    private void setCellAttributes(Cell cell, ReportColumn column, int col, int row, 
+    private void setCellAttributes(Cell cell, FileColumn column, int col, int row, 
         String data, String sheetName)
     {
         short type = column.getType();
@@ -958,19 +958,19 @@ public class XlsxWorkbook extends Workbook
             {
                 setSharedStringCell(cell, data, sheetName);
             }
-            else if(type == ReportColumn.STRING_TYPE || type == ReportColumn.NO_TYPE)
+            else if(type == FileColumn.STRING_TYPE || type == FileColumn.NO_TYPE)
             {
                 setSharedStringCell(cell, data, sheetName);
             }
-            else if(type == ReportColumn.NUMBER_TYPE)
+            else if(type == FileColumn.NUMBER_TYPE)
             {
                 setNumberCell(cell, data);
             }
-            else if(type == ReportColumn.BOOLEAN_TYPE)
+            else if(type == FileColumn.BOOLEAN_TYPE)
             {
                 setBooleanCell(cell, data);
             }
-            else if(type == ReportColumn.DATETIME_TYPE)
+            else if(type == FileColumn.DATETIME_TYPE)
             {
                 setDateCell(cell, data);
             }

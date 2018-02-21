@@ -199,7 +199,7 @@ public class OutputFileWriter
      * @return The formatted output file contents
      * @throws IOException if the file cannot be opened
      */
-    public byte[] getContents(ReportColumn[] columns, List<String[]> lines)
+    public byte[] getContents(FileColumn[] columns, List<String[]> lines)
         throws IOException
     {
         byte[] ret;
@@ -241,7 +241,7 @@ public class OutputFileWriter
      * @param lines The lines to add to the output file
      * @return The XLS or XLSX output file data
      */
-    private byte[] getExcelOutput(ReportColumn[] columns, List<String[]> lines) throws IOException
+    private byte[] getExcelOutput(FileColumn[] columns, List<String[]> lines) throws IOException
     {
         // Create the workbook
         baos = new ByteArrayOutputStream(1024);
@@ -281,7 +281,7 @@ public class OutputFileWriter
      * @param lines The lines to add to the output file
      * @throws IOException if there was an error writing to the stream
      */
-    public void write(ReportColumn[] columns, List<String[]> lines) throws IOException
+    public void write(FileColumn[] columns, List<String[]> lines) throws IOException
     {
         Object contents = getContents(columns, lines);
         if(stream != null && contents instanceof byte[])
