@@ -92,7 +92,7 @@ Add the following dependency to include the artefact within your project:
 <dependency>
   <groupId>com.opsmatters</groupId>
   <artifactId>opsmatters-core</artifactId>
-  <version>0.9.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
