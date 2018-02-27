@@ -27,7 +27,7 @@
     <url>https://github.com/opsmatters/opsmatters-core</url>
     <connection>scm:git:https://github.com/opsmatters/opsmatters-core.git</connection>
     <developerConnection>scm:git:https://github.com/opsmatters/opsmatters-core.git</developerConnection>
-    <tag>opsmatters-core-1.0.0</tag>
+    <tag>opsmatters-core-1.0.1</tag>
   </scm>
 
   <developers>
@@ -259,7 +259,7 @@ built.on=${TODAY}
 <dependency>
   <groupId>com.opsmatters</groupId>
   <artifactId>newrelic-api</artifactId>
-  <version>1.0.9</version>
+  <version>1.0.10</version>
 </dependency>
 
 <dependency>
