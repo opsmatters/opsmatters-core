@@ -29,6 +29,7 @@ import com.opsmatters.newrelic.api.model.plugins.Plugin;
 import com.opsmatters.newrelic.api.model.plugins.PluginComponent;
 import com.opsmatters.newrelic.api.model.synthetics.Monitor;
 import com.opsmatters.newrelic.api.model.labels.Label;
+import com.opsmatters.newrelic.api.exceptions.ErrorResponseException;
 
 /**
  * Represents a manager of a New Relic configuration.  
@@ -234,8 +235,18 @@ public class NewRelicManager implements ProviderManager<NewRelicCache>
                 }
 
                 // Get the key transaction configuration using the REST API
-                logger.info("Getting the key transactions");
-                cache.applications().addKeyTransactions(apiClient.keyTransactions().list());
+                try
+                {
+                    logger.info("Getting the key transactions");
+                    cache.applications().addKeyTransactions(apiClient.keyTransactions().list());
+                }
+                catch(ErrorResponseException e)
+                {
+                    if(e.getStatus() == 403) // throws 403 if not allowed by subscription
+                        logger.warning("Error in get key transactions: "+e.getMessage());
+                    else
+                        throw e;
+                }
             }
 
             if(cache.isBrowserEnabled())
